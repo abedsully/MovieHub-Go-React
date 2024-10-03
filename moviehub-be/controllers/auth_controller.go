@@ -75,7 +75,7 @@ func (ctrl *AuthController) Login(c *gin.Context) {
 }
 
 func (ctrl *AuthController) Logout(c *gin.Context) {
-	c.SetCookie("access_token", "", -1, "/", "localhost", false, true)
+    c.SetCookie("access_token", "", -1, "/", "", false, true)
 
-	c.JSON(http.StatusOK, gin.H{"message": "Successfully logged out"})
+    c.JSON(http.StatusOK, gin.H{"message": "Successfully logged out"})
 }

@@ -13,5 +13,17 @@ export const tmdbAPIImage = "https://image.tmdb.org/t/p/w500/"
 export const tmbdAPIKey = import.meta.env.VITE_API_KEY
 
 export const API_Tmdb = {
-    trendingMovie: `${tmdbAPI}/trending/movie/day?api_key=${tmbdAPIKey}`,
+
+    // Area API Trending Movies/Series/People
+    trendingMovie: `${tmdbAPI}/trending/all/day?api_key=${tmbdAPIKey}`,
+
+    // Area API Search Movies/Series/People
+    searchMulti: (category: string) => {
+        return `${tmdbAPI}/search/${category}?api_key=${tmbdAPIKey}`
+    },
+
+    // Area API Detail Movies/Series/People
+    detail: (category: string, id: number) => {
+        return `${tmdbAPI}/${category}/${id}?api_key=${tmbdAPIKey}`
+    }
 }

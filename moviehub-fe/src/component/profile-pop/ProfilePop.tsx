@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Avatar from "../avatar/Avatar";
 import {
     ArrowLeftEndOnRectangleIcon,
     KeyIcon,
     UserIcon,
 } from "@heroicons/react/24/outline";
+import axios from "axios";
+import { ApiMovieHub } from "../../constant/Api";
 
 interface IProfileProp {
     image: string;
@@ -15,9 +17,22 @@ const iconClasses2 = `h-5 w-5`;
 
 const ProfilePop = ({ image }: IProfileProp) => {
     const [isOpen, setIsOpen] = useState(false);
+    const navigate = useNavigate();
 
     const toggleDropdown = () => {
         setIsOpen((prev) => !prev);
+    };
+
+    const handleLogoutClick = async () => {
+        try {
+            const response = await axios.post(ApiMovieHub.logout, {}, { withCredentials: true });
+
+            if (response.status === 200) {
+                navigate("/login");
+            }
+        } catch (error) {
+            console.log("Error logging out");
+        }
     };
 
     return (
@@ -31,7 +46,7 @@ const ProfilePop = ({ image }: IProfileProp) => {
                 <Avatar image={image} />
             </div>
             {isOpen && (
-                <ul className="absolute right-0 z-50 menu p-2 shadow-lg bg-white rounded-box w-52 ">
+                <ul className="absolute right-0 z-50 menu p-2 shadow-lg bg-white rounded-box w-52">
                     <li>
                         <Link to="/dashboard" className="hover:bg-gray-200">
                             <KeyIcon className={iconClasses2} /> Change Password
@@ -43,9 +58,9 @@ const ProfilePop = ({ image }: IProfileProp) => {
                         </Link>
                     </li>
                     <li>
-                        <Link className="hover:bg-red-500 hover:text-white" to="/dashboard">
+                        <div className="hover:bg-red-500 hover:text-white cursor-pointer" onClick={handleLogoutClick}>
                             <ArrowLeftEndOnRectangleIcon className={iconClasses2} /> Logout
-                        </Link>
+                        </div>
                     </li>
                 </ul>
             )}
