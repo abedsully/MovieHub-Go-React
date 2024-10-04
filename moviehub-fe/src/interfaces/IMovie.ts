@@ -1,4 +1,5 @@
 import IGenre from "./IGenre";
+import IProductCompanies from "./IProductionCompanies";
 
 interface IMovie {
     genres: IGenre[];
@@ -12,6 +13,8 @@ interface IMovie {
     runtime: number; 
     vote_average: number;
     media_type: string;
+    production_companies: IProductCompanies[];
+    homepage: string;
 }
 
 export default IMovie

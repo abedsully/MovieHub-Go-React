@@ -15,7 +15,9 @@ export const tmbdAPIKey = import.meta.env.VITE_API_KEY
 export const API_Tmdb = {
 
     // Area API Trending Movies/Series/People
-    trendingMovie: `${tmdbAPI}/trending/all/day?api_key=${tmbdAPIKey}`,
+    trending: (category: string) => {
+        return `${tmdbAPI}/trending/${category}/day?api_key=${tmbdAPIKey}`
+    },
 
     // Area API Search Movies/Series/People
     searchMulti: (category: string) => {
@@ -35,5 +37,10 @@ export const API_Tmdb = {
     // Area API Movie Credits Actor/Director
     credits: (category: string, id: number) => {
         return `${tmdbAPI}/${category}/${id}/credits?api_key=${tmbdAPIKey}`
+    },
+
+    // Area API Get Images
+    images: (category: string, id: number) => {
+        return `${tmdbAPI}/${category}/${id}/images?api_key=${tmbdAPIKey}`
     }
 }

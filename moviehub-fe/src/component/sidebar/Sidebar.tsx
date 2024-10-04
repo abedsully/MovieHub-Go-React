@@ -49,31 +49,35 @@ const Sidebar = () => {
         } md:translate-x-0`}
       >
         <div className="flex flex-col flex-grow">
-          <ul className="menu w-60 px-5  gap-1">
-            <Logo />
+          <ul className="menu w-60 px-5 gap-1">
+          <Logo />
+            <div className="flex flex-col lg:mt-[2rem] gap-4">
 
-            {SidebarRoutes.map((route, k) => (
-              <li className="py-1" key={k}>
-                <NavLink
-                  end
-                  to={route.path}
-                  onClick={() => handleRouteChange(route.path)}
-                  className={({ isActive }) =>
-                    activePath === route.path || isActive
-                      ? "font-semibold bg-red-500 text-white"
-                      : "font-normal text-white bg-transparent"
-                  }
-                >
-                  {route.icon} {route.name}
-                </NavLink>
-              </li>
-            ))}
+
+              {SidebarRoutes.map((route, k) => (
+                <li className="py-1" key={k}>
+                  <NavLink
+                    end
+                    to={route.path}
+                    onClick={() => handleRouteChange(route.path)}
+                    className={({ isActive }) =>
+                      activePath === route.path || isActive
+                        ? "font-semibold bg-customOrangeColor text-white"
+                        : "font-normal text-white bg-transparent"
+                    }
+                  >
+                    {route.icon} {route.name}
+                  </NavLink>
+                </li>
+              ))}
+            </div>
           </ul>
         </div>
         <div className="fixed bottom-[0]">
           <p className="w-full flex justify-center font-semibold text-sm ml-[.6rem]">
             {" "}
-            Copyright © {new Date().getFullYear()} Movie<span className="text-customOrangeColor">Hub</span>
+            Copyright © {new Date().getFullYear()} Movie
+            <span className="text-customOrangeColor">Hub</span>
           </p>
         </div>
       </div>

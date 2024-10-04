@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import ICardComponent from "./ICardComponent";
+import { tmdbAPIImage } from "../../constant/Api";
+import logo from '../../assets/logo.png'
 
 const CardComponent = ({ movie }: ICardComponent) => {
   return (
@@ -13,14 +15,14 @@ const CardComponent = ({ movie }: ICardComponent) => {
       <div key={movie.id} className="rounded-lg overflow-hidden">
         {movie.poster_path ? (
           <img
-            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-            alt={movie.title}
+            src={`${tmdbAPIImage}${movie.poster_path}`}
             className="w-full h-auto"
           />
         ) : (
-          <div className="h-40 bg-gray-300 flex items-center justify-center">
-            <span>No Image Available</span>
-          </div>
+          <img
+            src={logo}
+            className="w-full h-auto"
+          />
         )}
       </div>
     </Link>

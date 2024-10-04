@@ -1,7 +1,7 @@
 import { ISidebarRoutes } from "./ISidebarRoutes";
 import { HomeIcon } from '@heroicons/react/24/outline';
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import { PlusCircleIcon } from '@heroicons/react/24/outline';
+import { HeartIcon } from '@heroicons/react/24/outline';
+import { HandThumbUpIcon } from '@heroicons/react/24/outline';
 
 const iconClasses = `h-6 w-6`;
 
@@ -15,16 +15,16 @@ const SidebarRoutes: ISidebarRoutes[] = [
 
   // Search
   {
-    path: "/search",
-    icon: <MagnifyingGlassIcon className={iconClasses} />,
-    name: "Search",
+    path: "/my-favorite/:id",
+    icon: <HeartIcon className={iconClasses} />,
+    name: "My Favorites",
   },
 
   // Add Post
   {
-    path: "/add-post",
-    icon: <PlusCircleIcon className={iconClasses} />,
-    name: "Add Post",
+    path: "/my-reviews/:id",
+    icon: <HandThumbUpIcon className={iconClasses} />,
+    name: "My Reviews",
   },
 ];
 
