@@ -25,5 +25,15 @@ export const API_Tmdb = {
     // Area API Detail Movies/Series/People
     detail: (category: string, id: number) => {
         return `${tmdbAPI}/${category}/${id}?api_key=${tmbdAPIKey}`
+    },
+
+    // Area API Get Featured Videos Movies/Series
+    videos: (category: string, id: number) => {
+        return `${tmdbAPI}/${category}/${id}/videos?api_key=${tmbdAPIKey}`
+    },
+
+    // Area API Movie Credits Actor/Director
+    credits: (category: string, id: number) => {
+        return `${tmdbAPI}/${category}/${id}/credits?api_key=${tmbdAPIKey}`
     }
 }

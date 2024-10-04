@@ -2,13 +2,11 @@ import { Route, Routes } from "react-router-dom";
 import PageRoutes from "../config/Route";
 
 const PageContent = () => {
-  const isHMaxNeeded = false;
 
-  const defaultClass = isHMaxNeeded ? "h-max" : "h-100";
 
   return (
     <div
-      className={`drawer-content flex flex-col justify-center items-center ${defaultClass}`}
+      className={`drawer-content flex flex-col justify-center items-center`}
     >
       <Routes>
         {PageRoutes.map((route, key) => (

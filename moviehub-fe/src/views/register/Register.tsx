@@ -72,16 +72,16 @@ const Register = () => {
 
   return (
     <>
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+      <div className="flex min-h-screen flex-1 flex-col justify-center px-6 py-6 lg:px-8 bg-customPurpleColor">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img alt="Your Company" src={logo} className="mx-auto h-32 w-32" />
-          <h2 className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+          <h2 className="text-center text-2xl font-bold leading-9 tracking-tight text-white">
             Sign in to your account
           </h2>
         </div>
 
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <div className="space-y-6">
+        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm ">
+          <div className="space-y-6 text-white">
             <TextInput
               label={"Username"}
               placeholder={"Enter username"}
@@ -112,7 +112,7 @@ const Register = () => {
               Already have an account?{" "}
               <Link
                 to="/login"
-                className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+                className="font-semibold leading-6 text-customOrangeColor"
               >
                 Login!
               </Link>

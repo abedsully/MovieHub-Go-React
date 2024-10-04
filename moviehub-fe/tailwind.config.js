@@ -8,6 +8,7 @@ export default {
     extend: {
       colors: {
         'customDarkColor': "#100f12",
+        'customPurpleColor': '#2c2d42',
         'customOrangeColor': "#f55b03",
       },
     },

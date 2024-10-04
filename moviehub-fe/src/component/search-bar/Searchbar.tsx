@@ -63,6 +63,8 @@ const Searchbar = () => {
 
   const handleSearchResultClick = (result: IMovie | IPeople | ISeries) => {
     setSearchDropdownVisible(false);
+    setSearchResults([]);
+    setSearchQuery("");
   
     let path = "";
     

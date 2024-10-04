@@ -30,7 +30,7 @@ const Sidebar = () => {
         {isOpen ? (
           <XMarkIcon className="h-6 w-6" />
         ) : (
-          <div className="bg-white rounded-lg p-1">
+          <div className="text-white rounded-lg p-1">
             <Bars3Icon className="h-5 w-5 mt-1.5" />
           </div>
         )}

@@ -60,9 +60,11 @@ const Dashboard = () => {
         <Searchbar />
 
         {/* Area Trending Movies */}
-        <div className="flex flex-col mt-10">
-          <h1 className="text-lg font-semibold">Trending Movies & Television Series</h1>
-          <div className="grid grid-cols-3 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mt-4">
+        <div className="flex flex-col mt-10 text-white">
+          <h1 className="text-lg font-semibold">
+            Trending Movies & Television Series
+          </h1>
+          <div className="grid grid-cols-3 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 mt-4">
             {movies.map((movie) => (
               <CardComponent key={movie.id} movie={movie} />
             ))}

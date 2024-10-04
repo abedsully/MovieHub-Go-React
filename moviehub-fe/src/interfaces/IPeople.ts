@@ -5,6 +5,7 @@ interface IPeople {
     original_name?: string;
     profile_path: string;
     known_for_department: string;
+    job: string;
 }
 
 export default IPeople
