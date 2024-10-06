@@ -41,11 +41,16 @@ func main() {
 
 	authCtrl := &controllers.AuthController{DB: db}
 	userCtrl := &controllers.UserController{DB: db}
+	commentCtrl := &controllers.CommentController{DB: db}
 
 	r.POST("/auth/register", authCtrl.Register)
 	r.POST("/auth/login", authCtrl.Login)
 	r.POST("/auth/logout", authCtrl.Logout)
 	r.GET("/auth/current_user", middleware.AuthMiddleWare(), userCtrl.GetCurrentUser)
+
+	r.POST("/post-comment", middleware.AuthMiddleWare(), commentCtrl.AddComment)
+	r.GET("/get-comments/:movieId", , middleware.AuthMiddleWare(), commentCtrl.GetCommentByMovieID)
+	r.GET("/users/:id", , middleware.AuthMiddleWare(), userCtrl.GetUserByUserId)
 
 	r.Run(":8080")
 }

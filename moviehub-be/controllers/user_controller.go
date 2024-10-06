@@ -24,3 +24,16 @@ func (ctrl *UserController) GetCurrentUser(c *gin.Context) {
 
 	c.JSON(http.StatusOK, user)
 }
+
+func (ctrl *UserController) GetUserByUserId(c *gin.Context) {
+	userID := c.Param("id")
+
+	var user models.User
+
+	if err := ctrl.DB.Where("id = ?", userID).First(&user).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, user)
+}
