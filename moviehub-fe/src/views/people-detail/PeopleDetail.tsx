@@ -1,19 +1,20 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { API_Tmdb } from "../../constant/Api"; // Ensure this contains the base API URL
+import { API_Tmdb } from "../../constant/Api";
 import IPeople from "../../interfaces/IPeople";
+import { convertIdToInt } from "../../utils/utils";
 
 const MovieDetail = () => {
-  const { id } = useParams(); // Extracting id from the URL parameters
+  const { id } = useParams();
   const [movieDetail, setMovieDetail] = useState<IPeople>();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchMovieDetail = async () => {
       try {
-        const movieId = parseInt(id, 10);
-        const response = await axios.get(`${API_Tmdb.detail("person", movieId)}`); // Adjust based on your API
+        const movieId = convertIdToInt(typeof id == "string" ? id : "")
+        const response = await axios.get(`${API_Tmdb.detail("person", movieId)}`);
         setMovieDetail(response.data);
       } catch (error) {
         console.error("Error fetching movie details", error);

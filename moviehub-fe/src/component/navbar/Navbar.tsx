@@ -1,4 +1,4 @@
-import ProfilePop from '../profile-pop/ProfilePop'; // Ensure the correct import path for ProfilePop
+import ProfilePop from '../profile-pop/ProfilePop';
 import Searchbar from '../search-bar/Searchbar';
 
 

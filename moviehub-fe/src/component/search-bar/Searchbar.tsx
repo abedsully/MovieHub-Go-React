@@ -76,7 +76,6 @@ const Searchbar = () => {
       path = `/person/${result.id}`;
     }
   
-    // Navigate only if a path is determined
     if (path) {
       navigate(path);
     }
