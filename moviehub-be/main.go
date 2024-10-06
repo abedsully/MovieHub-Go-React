@@ -49,7 +49,7 @@ func main() {
 	r.GET("/auth/current_user", middleware.AuthMiddleWare(), userCtrl.GetCurrentUser)
 
 	r.POST("/post-comment", middleware.AuthMiddleWare(), commentCtrl.AddComment)
-	r.GET("/get-comments/:movieId", , middleware.AuthMiddleWare(), commentCtrl.GetCommentByMovieID)
+	r.GET("/get-comments/:movieId", middleware.AuthMiddleWare(), commentCtrl.GetCommentByMovieID)
 	r.GET("/users/:id", , middleware.AuthMiddleWare(), userCtrl.GetUserByUserId)
 
 	r.Run(":8080")
