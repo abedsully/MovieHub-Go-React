@@ -1,12 +1,26 @@
 export const api = "http://localhost:8080";
 
 export const ApiMovieHub = {
+
+    // Area API Authentication
     register: `${api}/auth/register`,
     login: `${api}/auth/login`,
     currentUser: `${api}/auth/current_user`,
     logout: `${api}/auth/logout`,
-    addPost: `${api}/post-comment`,
-    getComments: `${api}/get-comments`,
+
+    // Area API Comments
+    addComment: `${api}/comments/post-comment`,
+    getComments: `${api}/comments`,
+
+    // Area API Favorite
+    addFavorite: (movieId: number) => {
+        return `${api}/favorite/add/${movieId}`
+    }, 
+    removeFavorite: (movieId: number) => {
+        return `${api}/favorite/remove/${movieId}`
+    }, 
+
+    // Area API User
     getUserByUserId: (userId: string) => {
         return `${api}/users/${userId}`
     },

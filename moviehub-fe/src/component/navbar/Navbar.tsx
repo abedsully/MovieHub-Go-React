@@ -8,7 +8,7 @@ interface IProfileProp {
 
 const Navbar = ({ image }: IProfileProp) => {
   return (
-    <div className="ml-[2rem] sm:ml-[2rem] lg:ml-[21rem] 2xl:ml-[24rem] w-full flex justify-end items-center gap-[2rem] ">
+    <div className="ml-[2rem] sm:ml-[2rem] lg:ml-[21rem] 2xl:ml-[23rem] w-full flex justify-end items-center gap-[2rem] ">
       <Searchbar />
       <ProfilePop image={image} />
     </div>

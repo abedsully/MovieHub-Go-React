@@ -22,6 +22,7 @@ import UpcomingMovies from "../../component/upcoming-movies/UpcomingMovies";
 import { Helmet } from "react-helmet";
 import Navbar from "../../component/navbar/Navbar";
 import ImagePreviewModal from "../../component/image-preview/ImagePreviewModal";
+import logo from "../../assets/logo.png"
 
 const MovieDetail = () => {
   const { id } = useParams();
@@ -48,7 +49,7 @@ const MovieDetail = () => {
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  const handleChevronClick = () => {
+  const handleMoreImageClick = () => {
     setCurrentImageIndex(0);
     setIsImageModalOpen(true);
   };
@@ -56,6 +57,8 @@ const MovieDetail = () => {
   const movieId = convertIdToInt(typeof id == "string" ? id : "")
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     const fetchMovieDetail = async () => {
       try {
         const movieResponse = await axios.get(
@@ -101,11 +104,14 @@ const MovieDetail = () => {
       return;
     }
 
+    if (comment === "") {
+      console.error("Cant be empty");
+      return;
+    }
+
     try {
-
-
       const response = await axios.post(
-        ApiMovieHub.addPost,
+        ApiMovieHub.addComment,
         {
           movieId: movieId,
           userId: user.id,
@@ -221,10 +227,10 @@ const MovieDetail = () => {
       </Helmet>
 
       <div className="mt-16 2xl:ml-[24rem]">
-        <Navbar image={""} />
+        <Navbar image={logo} />
       </div>
 
-      <div className="flex flex-col lg:ml-[18rem] p-5">
+      <div className="flex flex-col lg:ml-[18rem] p-5 lg:px-[2.5rem]">
         <div className="flex text-white  mt-[2rem]">
           <div className="flex flex-col lg:flex-row gap-[1rem] lg:gap-[6rem] items-center">
             <img
@@ -299,7 +305,7 @@ const MovieDetail = () => {
         {/* Area Movie Images*/}
         <div className="flex flex-col mt-4 text-white">
           <div className="flex gap-4 mt-[4rem] items-center">
-            <h1 className="text-white text-xl border-l-4 border-customOrangeColor pl-2 cursor-pointer" onClick={handleChevronClick}>
+            <h1 className="text-white text-xl border-l-4 border-customOrangeColor pl-2 cursor-pointer" onClick={handleMoreImageClick}>
               Images:
             </h1>
           </div>

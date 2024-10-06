@@ -12,9 +12,7 @@ const CardComponent = ({ movie, size, upcoming }: ICardComponent) => {
   return (
     <Link
       to={
-        upcoming
-          ? `/upcoming-movies-shows`
-          : movie.media_type === "movie"
+        (isMovie(movie))
           ? `/movies/${movie.id}`
           : `/series/${movie.id}`
       }
