@@ -33,7 +33,7 @@ func (ctrl *CommentController) AddComment(c *gin.Context) {
 		c.JSON(http.StatusForbidden, gin.H{"error": "User ID does not match the current user"})
 		return
 	}
-
+	
 	newComment.ID = uuid.New()
 	newComment.DateInputted = time.Now()
 
