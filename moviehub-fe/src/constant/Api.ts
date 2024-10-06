@@ -5,6 +5,11 @@ export const ApiMovieHub = {
     login: `${api}/auth/login`,
     currentUser: `${api}/auth/current_user`,
     logout: `${api}/auth/logout`,
+    addPost: `${api}/post-comment`,
+    getComments: `${api}/get-comments`,
+    getUserByUserId: (userId: string) => {
+        return `${api}/users/${userId}`
+    },
 }
 
 export const tmdbAPI = "https://api.themoviedb.org/3";
@@ -42,5 +47,12 @@ export const API_Tmdb = {
     // Area API Get Images
     images: (category: string, id: number) => {
         return `${tmdbAPI}/${category}/${id}/images?api_key=${tmbdAPIKey}`
-    }
+    },
+
+    // Area API Get Recommendations from Id - Movie, Sereis
+    recommendation: (category: string, id: number) => {
+        return `${tmdbAPI}/${category}/${id}/recommendations?api_key=${tmbdAPIKey}`
+    },
+
+    upcomingMovies: `${tmdbAPI}/movie/upcoming?api_key=${tmbdAPIKey}`,
 }

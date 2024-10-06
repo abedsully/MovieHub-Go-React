@@ -72,7 +72,7 @@ const Register = () => {
 
   return (
     <>
-      <div className="flex min-h-screen flex-1 flex-col justify-center px-6 py-6 lg:px-8 bg-customPurpleColor">
+      <div className="flex min-h-screen flex-1 flex-col justify-center px-6 py-6 lg:px-8 bg-customDarkColor">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img alt="Your Company" src={logo} className="mx-auto h-32 w-32" />
           <h2 className="text-center text-2xl font-bold leading-9 tracking-tight text-white">

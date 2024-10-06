@@ -1,19 +1,27 @@
 import { useEffect, useState, useRef } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { API_Tmdb } from "../../constant/Api";
+import { API_Tmdb, ApiMovieHub } from "../../constant/Api";
 import IMovie from "../../interfaces/IMovie";
 import IVideo from "../../interfaces/IVideo";
 import {
   getReleaseYear,
   convertDuration,
   formatVoteAverage,
+  convertIdToInt,
 } from "../../utils/utils";
 import { StarIcon } from "@heroicons/react/24/solid";
 import IMovieCredit from "../../interfaces/IMovieCredit";
-import Searchbar from "../../component/search-bar/Searchbar";
 import IPhotos from "../../interfaces/IPhotos";
 import PhotoComponent from "../../component/photo-component/PhotoComponent";
+import PeopleComponent from "../../component/people-component/PeopleComponent";
+import CardComponent from "../../component/card-component/CardComponent";
+import { useUser } from "../../context/UserContext";
+import Comments from "../../component/comment/Comments";
+import UpcomingMovies from "../../component/upcoming-movies/UpcomingMovies";
+import { Helmet } from "react-helmet";
+import Navbar from "../../component/navbar/Navbar";
+import ImagePreviewModal from "../../component/image-preview/ImagePreviewModal";
 
 const MovieDetail = () => {
   const { id } = useParams();
@@ -21,23 +29,35 @@ const MovieDetail = () => {
   const [movieCredit, setMovieCredit] = useState<IMovieCredit | undefined>(
     undefined
   );
-
   const [movieImages, setMovieImages] = useState<IPhotos>();
-
   const [video, setVideo] = useState<IVideo | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedTab, setSelectedTab] = useState<
     "Overview" | "Trailer" | "Details"
   >("Overview");
-
+  const [movieRecommendations, setMovieRecommendations] = useState<IMovie[]>(
+    []
+  );
   const indicatorRef = useRef<HTMLDivElement>(null);
   const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  const [comment, setComment] = useState("");
+  const user = useUser();
+  const navigate = useNavigate();
+
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const handleChevronClick = () => {
+    setCurrentImageIndex(0);
+    setIsImageModalOpen(true);
+  };
+
+  const movieId = convertIdToInt(typeof id == "string" ? id : "")
 
   useEffect(() => {
     const fetchMovieDetail = async () => {
       try {
-        const movieId = parseInt(id, 10);
-
         const movieResponse = await axios.get(
           `${API_Tmdb.detail("movie", movieId)}`
         );
@@ -46,7 +66,6 @@ const MovieDetail = () => {
         const videoResponse = await axios.get(
           `${API_Tmdb.videos("movie", movieId)}`
         );
-
         const availableVideo = videoResponse.data.results.find(
           (video: IVideo) => video.site === "YouTube" && video.official === true
         );
@@ -60,8 +79,12 @@ const MovieDetail = () => {
         const movieImages = await axios.get(
           `${API_Tmdb.images("movie", movieId)}`
         );
-
         setMovieImages(movieImages.data);
+
+        const movieRecommendation = await axios.get(
+          `${API_Tmdb.recommendation("movie", movieId)}`
+        );
+        setMovieRecommendations(movieRecommendation.data.results.slice(0, 6));
       } catch (error) {
         console.error("Error fetching movie details or videos", error);
       } finally {
@@ -71,6 +94,32 @@ const MovieDetail = () => {
 
     fetchMovieDetail();
   }, [id]);
+
+  const handleCommentSubmit = async () => {
+    if (!user?.id) {
+      console.error("User ID not available");
+      return;
+    }
+
+    try {
+
+
+      const response = await axios.post(
+        ApiMovieHub.addPost,
+        {
+          movieId: movieId,
+          userId: user.id,
+          comment: comment,
+          dateInputted: new Date().toISOString(),
+        },
+        { withCredentials: true }
+      );
+      console.log("Comment submitted:", response.data);
+      navigate(0);
+    } catch (error) {
+      console.error("Error submitting comment:", error);
+    }
+  };
 
   useEffect(() => {
     const currentButton = buttonRefs.current.find(
@@ -167,9 +216,14 @@ const MovieDetail = () => {
 
   return (
     <>
-      <div className="w-full flex justify-end mt-[3rem] px-[6rem]">
-        <Searchbar />
+      <Helmet>
+        <title>{`${movieDetail?.title} (${releaseYear})`} - MovieHub</title>
+      </Helmet>
+
+      <div className="mt-16 2xl:ml-[24rem]">
+        <Navbar image={""} />
       </div>
+
       <div className="flex flex-col lg:ml-[18rem] p-5">
         <div className="flex text-white  mt-[2rem]">
           <div className="flex flex-col lg:flex-row gap-[1rem] lg:gap-[6rem] items-center">
@@ -243,14 +297,94 @@ const MovieDetail = () => {
         </div>
 
         {/* Area Movie Images*/}
-        <div className="flex flex-col mt-10 text-white">
-          <h1 className="text-white mt-[4rem] text-xl">Images:</h1>
+        <div className="flex flex-col mt-4 text-white">
+          <div className="flex gap-4 mt-[4rem] items-center">
+            <h1 className="text-white text-xl border-l-4 border-customOrangeColor pl-2 cursor-pointer" onClick={handleChevronClick}>
+              Images:
+            </h1>
+          </div>
+
           {movieImages && movieImages.backdrops.length > 0 && (
             <PhotoComponent backdrops={movieImages.backdrops} />
           )}
+
+          {/* Add the ImagePreviewModal here */}
+          <ImagePreviewModal
+            isOpen={isImageModalOpen}
+            images={movieImages?.backdrops.map(
+              (backdrop) =>
+                `https://image.tmdb.org/t/p/w500${backdrop.file_path}`
+            ) || []}
+            onClose={() => setIsImageModalOpen(false)}
+            currentIndex={currentImageIndex}
+          />
         </div>
 
+        {/* Area Top Casts*/}
+        <div className="flex flex-col mt-4 text-white">
+          <h1 className="text-white mt-[4rem] text-xl border-l-4 border-customOrangeColor pl-2">
+            Top Casts:
+          </h1>
+          <div className="grid grid-cols-3 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-9 gap-6 mt-4">
+            {movieCredit?.cast.slice(0, 9).map((people) => (
+              <PeopleComponent people={people} />
+            ))}
+          </div>
+        </div>
 
+        {/* Area Movie Recommendation*/}
+        <div className="flex flex-col mt-4 text-white">
+          <h1 className="text-white mt-[4rem] text-xl border-l-4 border-customOrangeColor pl-2">
+            Recommended Movies:
+          </h1>
+          {movieRecommendations && movieRecommendations.length > 0 ? (
+            <div className="grid grid-cols-3 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 mt-4">
+              {movieRecommendations.map((movie) => (
+                <CardComponent key={movie.id} movie={movie} />
+              ))}
+            </div>
+          ) : (
+            <p className="mt-8 text-start">No Movie Recommendations Yet</p>
+          )}
+        </div>
+
+        <div className="flex flex-col mt-4 text-white gap-[2rem]">
+          <h1 className="text-white mt-[4rem] text-xl border-l-4 border-customOrangeColor pl-2">
+            Write a review
+          </h1>
+          <textarea
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            placeholder="Enter your review..."
+            className="mt-2 p-2 w-full h-20 bg-gray-800 text-white border border-gray-600 rounded"
+          />
+          <button
+            onClick={handleCommentSubmit}
+            className="mt-2 p-1 bg-customOrangeColor rounded-lg w-[8rem] text-sm font-semibold"
+          >
+            Post Comment
+          </button>
+        </div>
+
+        <div className="w-full lg:flex mt-[4rem] justify-between gap-[4rem]">
+          {/* Area Movie Comments */}
+          <div className="flex flex-col ">
+            <h1 className="text-white  mb-[2rem] text-xl border-l-4 border-customOrangeColor pl-2">
+              Reviews
+            </h1>
+
+            <Comments movieId={movieId} />
+          </div>
+
+          {/* Area Upcoming Movies*/}
+          <div className="flex flex-col">
+            <h1 className="text-white mt-[4rem] lg:mt-[0rem] mb-[2rem] text-xl border-l-4 border-customOrangeColor pl-2">
+              Upcoming Movies & Shows
+            </h1>
+
+            <UpcomingMovies />
+          </div>
+        </div>
       </div>
     </>
   );
