@@ -2,11 +2,9 @@ import { useEffect, useState, useRef } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { API_Tmdb, ApiMovieHub } from "../../constant/Api";
-import IMovie from "../../interfaces/IMovie";
 import IVideo from "../../interfaces/IVideo";
 import {
   getReleaseYear,
-  convertDuration,
   formatVoteAverage,
   convertIdToInt,
 } from "../../utils/utils";
@@ -351,7 +349,7 @@ const SeriesDetail = () => {
           </div>
         </div>
 
-        {/* Area Movie Recommendation*/}
+        {/* Area Series Recommendation*/}
         <div className="flex flex-col mt-4 text-white">
           <h1 className="text-white mt-[4rem] text-xl border-l-4 border-customOrangeColor pl-2">
             Recommended Movies:
