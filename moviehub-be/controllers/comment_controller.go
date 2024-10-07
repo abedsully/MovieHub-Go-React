@@ -57,3 +57,28 @@ func (ctrl *CommentController) GetCommentByMovieID(c *gin.Context) {
 
 	c.JSON(http.StatusOK, comments)
 }
+
+func (ctrl *CommentController) GetCommentByUserID(c *gin.Context) {
+	userId := c.Param("userId")
+
+	var comments []models.Comment
+
+	currentUserIDStr := c.MustGet("user_id").(string)
+	currentUserID, err := uuid.Parse(currentUserIDStr)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid user ID"})
+		return
+	}
+
+	if err := ctrl.DB.Where("user_id = ?", userId).Find(&comments).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch comments"})
+		return
+	}
+
+	if len(comments) > 0 && comments[0].UserID != currentUserID {
+		c.JSON(http.StatusForbidden, gin.H{"error": "User ID does not match the current user"})
+		return
+	}
+
+	c.JSON(http.StatusOK, comments)
+}
