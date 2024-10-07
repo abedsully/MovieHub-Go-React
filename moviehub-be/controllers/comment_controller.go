@@ -24,6 +24,12 @@ func (ctrl *CommentController) AddComment(c *gin.Context) {
 
 	currentUserIDStr := c.MustGet("user_id").(string)
 	currentUserID, err := uuid.Parse(currentUserIDStr)
+
+	if newComment.Type == nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "type is required"})
+		return
+	}
+
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid user ID"})
 		return
@@ -33,7 +39,7 @@ func (ctrl *CommentController) AddComment(c *gin.Context) {
 		c.JSON(http.StatusForbidden, gin.H{"error": "User ID does not match the current user"})
 		return
 	}
-	
+
 	newComment.ID = uuid.New()
 	newComment.DateInputted = time.Now()
 

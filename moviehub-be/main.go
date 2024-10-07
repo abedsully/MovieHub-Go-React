@@ -55,7 +55,7 @@ func main() {
     {
         commentGroup.POST("/post-comment", middleware.AuthMiddleWare(), commentCtrl.AddComment)
         commentGroup.GET("/:movieId", middleware.AuthMiddleWare(), commentCtrl.GetCommentByMovieID)
-        commentGroup.GET("/:userId", middleware.AuthMiddleWare(), commentCtrl.GetCommentByUserID)
+        commentGroup.GET("/user/:userId", middleware.AuthMiddleWare(), commentCtrl.GetCommentByUserID)
     }
 
 	favoriteGroup := r.Group("/favorite")
