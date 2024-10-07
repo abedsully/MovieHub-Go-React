@@ -4,6 +4,7 @@ interface IComment {
     userId: string;
     comment: string;
     dateInputted: string;
+    limit?: number;
 }
 
 export default IComment

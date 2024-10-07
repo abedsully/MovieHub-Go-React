@@ -1,14 +1,20 @@
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
-import SidebarRoutes from "./SidebarRoutes";
+import { useUser } from "../../context/UserContext";
 import { useState, useEffect } from "react";
 import Logo from "../logo/Logo";
+import SidebarRoutes from './SidebarRoutes';
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activePath, setActivePath] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
+  const user = useUser();
+  const userId = user?.id || "";
+
+  // Generate sidebar routes based on userId
+  const sidebar = SidebarRoutes(userId);
 
   useEffect(() => {
     setActivePath(location.pathname);
@@ -50,11 +56,9 @@ const Sidebar = () => {
       >
         <div className="flex flex-col flex-grow">
           <ul className="menu w-60 px-5 gap-1">
-          <Logo />
+            <Logo />
             <div className="flex flex-col lg:mt-[2rem] gap-4">
-
-
-              {SidebarRoutes.map((route, k) => (
+              {sidebar.map((route, k) => (
                 <li className="py-1" key={k}>
                   <NavLink
                     end
@@ -75,7 +79,6 @@ const Sidebar = () => {
         </div>
         <div className="fixed bottom-[0]">
           <p className="w-full flex justify-center font-semibold text-sm ml-[.6rem]">
-            {" "}
             Copyright © {new Date().getFullYear()} Movie
             <span className="text-customOrangeColor">Hub</span>
           </p>

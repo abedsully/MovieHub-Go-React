@@ -22,7 +22,9 @@ import UpcomingMovies from "../../component/upcoming-movies/UpcomingMovies";
 import { Helmet } from "react-helmet";
 import Navbar from "../../component/navbar/Navbar";
 import ImagePreviewModal from "../../component/image-preview/ImagePreviewModal";
-import logo from "../../assets/logo.png"
+import logo from "../../assets/logo.png";
+import { ChevronRightIcon } from "@heroicons/react/24/outline";
+import MediaTypes from "../../constant/Enums";
 
 const MovieDetail = () => {
   const { id } = useParams();
@@ -54,7 +56,7 @@ const MovieDetail = () => {
     setIsImageModalOpen(true);
   };
 
-  const movieId = convertIdToInt(typeof id == "string" ? id : "")
+  const movieId = convertIdToInt(typeof id == "string" ? id : "");
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -117,6 +119,7 @@ const MovieDetail = () => {
           userId: user.id,
           comment: comment,
           dateInputted: new Date().toISOString(),
+          type: MediaTypes.MOVIE,
         },
         { withCredentials: true }
       );
@@ -230,7 +233,7 @@ const MovieDetail = () => {
         <Navbar image={logo} />
       </div>
 
-      <div className="flex flex-col lg:ml-[18rem] p-5 lg:px-[2.5rem]">
+      <div className="flex flex-col lg:ml-[18rem] p-5 lg:px-[3rem]">
         <div className="flex text-white  mt-[2rem]">
           <div className="flex flex-col lg:flex-row gap-[1rem] lg:gap-[6rem] items-center">
             <img
@@ -305,7 +308,10 @@ const MovieDetail = () => {
         {/* Area Movie Images*/}
         <div className="flex flex-col mt-4 text-white">
           <div className="flex gap-4 mt-[4rem] items-center">
-            <h1 className="text-white text-xl border-l-4 border-customOrangeColor pl-2 cursor-pointer" onClick={handleMoreImageClick}>
+            <h1
+              className="text-white text-xl border-l-4 border-customOrangeColor pl-2 cursor-pointer"
+              onClick={handleMoreImageClick}
+            >
               Images:
             </h1>
           </div>
@@ -317,20 +323,26 @@ const MovieDetail = () => {
           {/* Add the ImagePreviewModal here */}
           <ImagePreviewModal
             isOpen={isImageModalOpen}
-            images={movieImages?.backdrops.map(
-              (backdrop) =>
-                `https://image.tmdb.org/t/p/w500${backdrop.file_path}`
-            ) || []}
+            images={
+              movieImages?.backdrops.map(
+                (backdrop) =>
+                  `https://image.tmdb.org/t/p/w500${backdrop.file_path}`
+              ) || []
+            }
             onClose={() => setIsImageModalOpen(false)}
             currentIndex={currentImageIndex}
           />
         </div>
 
-        {/* Area Top Casts*/}
+        {/* Area Top Casts */}
         <div className="flex flex-col mt-4 text-white">
-          <h1 className="text-white mt-[4rem] text-xl border-l-4 border-customOrangeColor pl-2">
-            Top Casts:
-          </h1>
+          <Link to={`/cast-detail/${movieDetail.id}`}>
+            <h1 className="text-white mt-[4rem] text-xl border-l-4 border-customOrangeColor pl-2 flex items-center">
+              Casts:
+              <ChevronRightIcon className="w-6 h-6 ml-2 text-customOrangeColor" />
+            </h1>
+          </Link>
+
           <div className="grid grid-cols-3 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-9 gap-6 mt-4">
             {movieCredit?.cast.slice(0, 9).map((people) => (
               <PeopleComponent people={people} />
@@ -372,14 +384,18 @@ const MovieDetail = () => {
           </button>
         </div>
 
+        {/* Area Movie Comments */}
         <div className="w-full lg:flex mt-[4rem] justify-between gap-[4rem]">
-          {/* Area Movie Comments */}
-          <div className="flex flex-col ">
-            <h1 className="text-white  mb-[2rem] text-xl border-l-4 border-customOrangeColor pl-2">
-              Reviews
-            </h1>
-
-            <Comments movieId={movieId} />
+          <div className="flex flex-col w-[30rem]">
+            <Link to={`/review-list/${movieDetail.id}`}>
+              <div className="flex gap-2">
+                <h1 className="text-white  mb-[2rem] text-xl border-l-4 border-customOrangeColor pl-2">
+                  Reviews
+                </h1>
+                <ChevronRightIcon className="w-6 h-6 mt-.5 text-customOrangeColor" />
+              </div>
+            </Link>
+            <Comments movieId={movieId} limit={5}/>
           </div>
 
           {/* Area Upcoming Movies*/}

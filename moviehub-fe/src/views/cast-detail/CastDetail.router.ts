@@ -3,10 +3,10 @@ import { IDefaultRouter } from "../../interfaces/IDefaultRouter";
 
 const routes: IDefaultRouter[] = [
     {
-        path: "/series/:id",
+        path: "/cast-detail/:id",
         exact: true,
-        name: "Series Detail",
-        component: React.lazy(() => import("./SeriesDetail")), 
+        name: "Cast Detail",
+        component: React.lazy(() => import("./CastDetail")), 
     }
 ];
 

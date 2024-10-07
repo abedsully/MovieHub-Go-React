@@ -136,7 +136,7 @@ const Searchbar = () => {
   };
 
   return (
-    <div className="flex items-center relative w-full max-w-lg">
+    <div className="flex items-center relative w-full max-w-lg z-0">
       <div className="relative me-2">
         <button
           type="button"

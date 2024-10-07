@@ -6,6 +6,9 @@ import routerDashboard from "../views/dashboard/Dashboard.router";
 import routerMovieDetail from "../views/movie-detail/MovieDetail.router";
 import routerSeriesDetail from "../views/series-detail/SeriesDetail.router";
 import routerPeopleDetail from "../views/people-detail/PeopleDetail.router";
+import routerCastDetail from "../views/cast-detail/CastDetail.router";
+import routerReviewList from "../views/review-list/ReviewList.router";
+import routerReviewUser from "../views/reviews/Reviews.router";
 
 export const routes: IDefaultRouter[] = [
     ...routerRegister,
@@ -13,7 +16,10 @@ export const routes: IDefaultRouter[] = [
     ...routerDashboard,
     ...routerMovieDetail,
     ...routerSeriesDetail,
-    ...routerPeopleDetail
+    ...routerPeopleDetail,
+    ...routerCastDetail,
+    ...routerReviewList,
+    ...routerReviewUser
 ];
 
 export default routes;

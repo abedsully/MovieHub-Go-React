@@ -11,6 +11,9 @@ export const ApiMovieHub = {
     // Area API Comments
     addComment: `${api}/comments/post-comment`,
     getComments: `${api}/comments`,
+    getCommentsByUserId: (userId: string) => {
+        return `${api}/comments/user/${userId}`
+    },
 
     // Area API Favorite
     addFavorite: (movieId: number) => {

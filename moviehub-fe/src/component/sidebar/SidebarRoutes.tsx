@@ -5,7 +5,7 @@ import { HandThumbUpIcon } from '@heroicons/react/24/outline';
 
 const iconClasses = `h-6 w-6`;
 
-const SidebarRoutes: ISidebarRoutes[] = [
+const SidebarRoutes = (userId: string) :ISidebarRoutes[] => [
   // Dashboard
   {
     path: "/dashboard",
@@ -22,7 +22,7 @@ const SidebarRoutes: ISidebarRoutes[] = [
 
   // Add Post
   {
-    path: "/my-reviews/:id",
+    path: `/reviews/${userId}`,
     icon: <HandThumbUpIcon className={iconClasses} />,
     name: "My Reviews",
   },
