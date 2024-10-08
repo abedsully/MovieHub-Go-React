@@ -8,6 +8,7 @@ import {
 } from "@heroicons/react/24/outline";
 import axios from "axios";
 import { ApiMovieHub } from "../../constant/Api";
+import { useUser } from "../../context/UserContext";
 
 interface IProfileProp {
     image: string;
@@ -16,6 +17,8 @@ interface IProfileProp {
 const iconClasses2 = `h-5 w-5`;
 
 const ProfilePop = ({ image }: IProfileProp) => {
+    const user = useUser();
+    const userId = user?.id ?? "";
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
 
@@ -53,7 +56,7 @@ const ProfilePop = ({ image }: IProfileProp) => {
                         </Link>
                     </li>
                     <li>
-                        <Link to="/profile/1" className="hover:bg-gray-200">
+                        <Link to={`/profile/${userId}`} className="hover:bg-gray-200">
                             <UserIcon className={iconClasses2} /> My Profile
                         </Link>
                     </li>

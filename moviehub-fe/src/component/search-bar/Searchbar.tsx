@@ -136,8 +136,8 @@ const Searchbar = () => {
   };
 
   return (
-    <div className="flex items-center relative w-full max-w-lg z-0">
-      <div className="relative me-2">
+    <div className="flex items-center relative w-full max-w-lg">
+      <div className="relative me-2 z-0">
         <button
           type="button"
           className="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 w-max text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200"
@@ -181,7 +181,7 @@ const Searchbar = () => {
 
       <input
         type="search"
-        className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+        className="block p-2.5 w-full z-0 text-sm text-gray-900 bg-gray-50 rounded border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
         placeholder={getPlaceholder()}
         value={searchQuery}
         onChange={handleSearchChange}

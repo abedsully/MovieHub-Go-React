@@ -1,7 +1,19 @@
 enum MediaTypes {
     MOVIE = "movie",
     TV = "tv",
-    PEOPLE = "people",
-  }
+    PEOPLE = "person",
+}
+
+enum KnownForDepartment {
+  ACTOR = "Acting",
+  DIRECTOR = "Directing"
+}
+
+enum PersonRole {
+  ACTING = "Actor",
+  DIRECTING = "Director"
+}
   
-  export default MediaTypes;
+const Enums = { MediaTypes, KnownForDepartment, PersonRole };
+
+export default Enums;

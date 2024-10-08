@@ -24,7 +24,7 @@ import Navbar from "../../component/navbar/Navbar";
 import ImagePreviewModal from "../../component/image-preview/ImagePreviewModal";
 import logo from "../../assets/logo.png";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
-import MediaTypes from "../../constant/Enums";
+import Enums from "../../constant/Enums";
 
 const MovieDetail = () => {
   const { id } = useParams();
@@ -119,7 +119,7 @@ const MovieDetail = () => {
           userId: user.id,
           comment: comment,
           dateInputted: new Date().toISOString(),
-          type: MediaTypes.MOVIE,
+          type: Enums.MediaTypes.MOVIE,
         },
         { withCredentials: true }
       );

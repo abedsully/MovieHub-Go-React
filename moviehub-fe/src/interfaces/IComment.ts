@@ -1,5 +1,3 @@
-import MediaTypes from "../constant/Enums";
-
 interface IComment {
     id: string;
     movieId: number;
@@ -7,7 +5,7 @@ interface IComment {
     comment: string;
     dateInputted: string;
     limit?: number;
-    type: MediaTypes;
+    type: string;
 }
 
 export default IComment

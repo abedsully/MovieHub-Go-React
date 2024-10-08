@@ -1,3 +1,5 @@
+import Enums from "./Enums";
+
 export const api = "http://localhost:8080";
 
 export const ApiMovieHub = {
@@ -72,4 +74,13 @@ export const API_Tmdb = {
     },
 
     upcomingMovies: `${tmdbAPI}/movie/upcoming?api_key=${tmbdAPIKey}`,
+
+    combinedCredits: (person_id: string) => {
+        return `${tmdbAPI}/${Enums.MediaTypes.PEOPLE}/${person_id}/combined_credits?api_key=${tmbdAPIKey}`
+    },
+
+    // Area API Get People's Tagged Images
+    taggedImages: (person_id: number) => {
+        return `${tmdbAPI}/${Enums.MediaTypes.PEOPLE}/${person_id}/tagged_images?api_key=${tmbdAPIKey}`
+    }
 }

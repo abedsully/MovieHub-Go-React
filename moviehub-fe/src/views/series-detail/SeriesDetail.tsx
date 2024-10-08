@@ -25,6 +25,7 @@ import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import ISeries from "../../interfaces/ISeries";
 import MediaTypes from "../../constant/Enums";
 import SeasonComponent from "../../component/season-component/SeasonComponent";
+import Enums from "../../constant/Enums";
 
 const SeriesDetail = () => {
   const { id } = useParams();
@@ -66,12 +67,12 @@ const SeriesDetail = () => {
     const fetchSeriesDetail = async () => {
       try {
         const seriesResponse = await axios.get(
-          `${API_Tmdb.detail(MediaTypes.TV, seriesId)}`
+          `${API_Tmdb.detail(Enums.MediaTypes.TV, seriesId)}`
         );
         setSeriesDetail(seriesResponse.data);
 
         const videoResponse = await axios.get(
-          `${API_Tmdb.videos(MediaTypes.TV, seriesId)}`
+          `${API_Tmdb.videos(Enums.MediaTypes.TV, seriesId)}`
         );
         const availableVideo = videoResponse.data.results.find(
           (video: IVideo) => video.site === "YouTube" && video.official === true
@@ -79,17 +80,17 @@ const SeriesDetail = () => {
         setVideo(availableVideo || null);
 
         const seriesCredits = await axios.get(
-          `${API_Tmdb.credits(MediaTypes.TV, seriesId)}`
+          `${API_Tmdb.credits(Enums.MediaTypes.TV, seriesId)}`
         );
         setSeriesCredit(seriesCredits.data);
 
         const seriesImages = await axios.get(
-          `${API_Tmdb.images(MediaTypes.TV, seriesId)}`
+          `${API_Tmdb.images(Enums.MediaTypes.TV, seriesId)}`
         );
         setSeriesImages(seriesImages.data);
 
         const seriesRecommendation = await axios.get(
-          `${API_Tmdb.recommendation(MediaTypes.TV, seriesId)}`
+          `${API_Tmdb.recommendation(Enums.MediaTypes.TV, seriesId)}`
         );
         setSeriesRecommendation(seriesRecommendation.data.results.slice(0, 6));
       } catch (error) {
@@ -121,7 +122,7 @@ const SeriesDetail = () => {
           userId: user.id,
           comment: comment,
           dateInputted: new Date().toISOString(),
-          type: MediaTypes.TV,
+          type: Enums.MediaTypes.TV,
         },
         { withCredentials: true }
       );
