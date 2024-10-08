@@ -9,8 +9,8 @@ import (
 
 type Favorite struct {
 	ID       		uuid.UUID 			   `json:"id"`
-	UserID        	uuid.UUID 	 		   `gorm:"type:char(36)" json:"userId"`
-	MovieID       	*int            	   `json:"movieId"`
+	UserID        	uuid.UUID 	 		   `gorm:"type:char(36)" json:"user_id"`
+	MovieID       	*int            	   `json:"movie_id"`
 	Type         	*enums.FavoriteType    `json:"type"`
 	DateInputted  	time.Time      		   `json:"dateInputted"`
 }

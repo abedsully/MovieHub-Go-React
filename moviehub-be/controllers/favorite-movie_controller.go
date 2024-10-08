@@ -27,10 +27,7 @@ func isValidFavoriteType(types enums.FavoriteType) bool {
 func (ctrl *FavoriteMovieController) CheckFavoriteState(c *gin.Context) {
 	var existingFavorite models.Favorite
 
-	var input struct {
-		Type    *enums.FavoriteType `json:"type"`
-		MovieID *int                `json:"movie_id"`
-	}
+	var input models.Favorite
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -80,11 +77,8 @@ func (ctrl *FavoriteMovieController) CheckFavoriteState(c *gin.Context) {
 func (ctrl *FavoriteMovieController) AddToFavorite(c *gin.Context) {
 	var favorite models.Favorite
 
-	var input struct {
-		Type    *enums.FavoriteType `json:"type"`
-		MovieID *int                `json:"movie_id"`
-		UserID uuid.UUID			`json:"user_id"`
-	}
+	var input models.Favorite
+
 	var existingFavorite models.Favorite
 
 	if err := c.ShouldBindJSON(&input); err != nil {
@@ -156,11 +150,7 @@ func (ctrl *FavoriteMovieController) AddToFavorite(c *gin.Context) {
 func (ctrl *FavoriteMovieController) RemoveFromFavorite(c *gin.Context) {
 	var favorite models.Favorite
 
-	var input struct {
-		Type    *enums.FavoriteType `json:"type"`
-		MovieID *int                `json:"movie_id"`
-		UserID uuid.UUID			`json:"user_id"`
-	}
+	var input models.Favorite
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
