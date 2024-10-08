@@ -13,8 +13,8 @@ const CardComponent = ({ movie, size, upcoming }: ICardComponent) => {
     <Link
       to={
         (isMovie(movie))
-          ? `/movies/${movie.id}`
-          : `/series/${movie.id}`
+          ? `/movie/${movie.id}`
+          : `/tv/${movie.id}`
       }
     >
       <div

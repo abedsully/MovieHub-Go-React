@@ -3,7 +3,7 @@ import { IDefaultRouter } from "../../interfaces/IDefaultRouter";
 
 const routes: IDefaultRouter[] = [
   {
-    path: "/movies/:id",
+    path: "/movie/:id",
     exact: true,
     name: "Movie Detail",
     component: React.lazy(() => import("./MovieDetail")),

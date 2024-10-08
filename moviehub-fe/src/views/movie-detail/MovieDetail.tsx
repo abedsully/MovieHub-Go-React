@@ -395,7 +395,7 @@ const MovieDetail = () => {
                 <ChevronRightIcon className="w-6 h-6 mt-.5 text-customOrangeColor" />
               </div>
             </Link>
-            <Comments movieId={movieId} limit={5}/>
+            <Comments movieId={movieId} limit={5} />
           </div>
 
           {/* Area Upcoming Movies*/}

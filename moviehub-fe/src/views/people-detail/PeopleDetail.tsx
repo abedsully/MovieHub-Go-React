@@ -24,7 +24,7 @@ const MovieDetail = () => {
     };
 
     fetchMovieDetail();
-  }, [id]); // Dependency on id to refetch when it changes
+  }, [id]);
 
   if (loading) {
     return <div>Loading...</div>;

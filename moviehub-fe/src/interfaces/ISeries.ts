@@ -1,5 +1,6 @@
 import IGenre from "./IGenre";
 import IProductCompanies from "./IProductionCompanies";
+import ISeason from "./ISeason";
 
 interface ISeries {
     id: number;
@@ -12,6 +13,7 @@ interface ISeries {
     genres: IGenre[];
     production_companies: IProductCompanies[];
     homepage: string;
+    seasons: ISeason[];
 }
 
 export default ISeries

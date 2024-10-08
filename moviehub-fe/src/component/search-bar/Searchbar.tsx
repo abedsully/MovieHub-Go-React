@@ -69,9 +69,9 @@ const Searchbar = () => {
     let path = "";
     
     if ("first_air_date" in result && result.first_air_date) {
-      path = `/series/${result.id}`;
+      path = `/tv/${result.id}`;
     } else if ("release_date" in result && result.release_date) {
-      path = `/movies/${result.id}`;
+      path = `/movie/${result.id}`;
     } else if ("known_for_department" in result && result.known_for_department) {
       path = `/person/${result.id}`;
     }

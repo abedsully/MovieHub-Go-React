@@ -12,8 +12,7 @@ const Sidebar = () => {
   const location = useLocation();
   const user = useUser();
   const userId = user?.id || "";
-
-  // Generate sidebar routes based on userId
+  
   const sidebar = SidebarRoutes(userId);
 
   useEffect(() => {

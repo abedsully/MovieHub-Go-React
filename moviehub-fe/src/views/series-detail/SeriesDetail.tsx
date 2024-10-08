@@ -24,10 +24,13 @@ import logo from "../../assets/logo.png";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import ISeries from "../../interfaces/ISeries";
 import MediaTypes from "../../constant/Enums";
+import SeasonComponent from "../../component/season-component/SeasonComponent";
 
 const SeriesDetail = () => {
   const { id } = useParams();
-  const [seriesDetail, setSeriesDetail] = useState<ISeries | undefined>(undefined);
+  const [seriesDetail, setSeriesDetail] = useState<ISeries | undefined>(
+    undefined
+  );
   const [seriesCredit, setSeriesCredit] = useState<IMovieCredit | undefined>(
     undefined
   );
@@ -90,7 +93,7 @@ const SeriesDetail = () => {
         );
         setSeriesRecommendation(seriesRecommendation.data.results.slice(0, 6));
       } catch (error) {
-        console.error("Error fetching movie details or videos", error);
+        console.error("Error fetching series details or videos", error);
       } finally {
         setLoading(false);
       }
@@ -118,7 +121,7 @@ const SeriesDetail = () => {
           userId: user.id,
           comment: comment,
           dateInputted: new Date().toISOString(),
-          type: MediaTypes.TV
+          type: MediaTypes.TV,
         },
         { withCredentials: true }
       );
@@ -148,7 +151,6 @@ const SeriesDetail = () => {
   }
 
   const releaseYear = getReleaseYear(seriesDetail.first_air_date);
-  // const durationFormatted = convertDuration(seriesDetail.runtime);
   const voteAverageFormatted = formatVoteAverage(seriesDetail.vote_average);
 
   const renderContent = () => {
@@ -246,8 +248,6 @@ const SeriesDetail = () => {
                   <h1 className="text-4xl font-medium">{seriesDetail.name}</h1>
                   <div className="flex gap-2 text-sm text-gray-400 font-medium justify-center lg:justify-start">
                     <p>{releaseYear}</p>
-                    <p>|</p>
-                    {/* <p>{durationFormatted}</p> */}
                   </div>
                 </div>
 
@@ -349,10 +349,32 @@ const SeriesDetail = () => {
           </div>
         </div>
 
+        {/* List of Seasons*/}
+        <div className="flex flex-col mt-4 text-white">
+          <h1 className="text-white mt-[4rem] text-xl border-l-4 border-customOrangeColor pl-2">
+            List of Seasons:
+          </h1>
+          {seriesDetail ? (
+            <div className="grid grid-cols-3 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 mt-4">
+              {seriesDetail.seasons
+                .filter((season) => season.season_number !== 0)
+                .map((season) => (
+                  <SeasonComponent
+                    name={season.name}
+                    poster_path={season.poster_path}
+                    season_number={0}
+                  />
+                ))}
+            </div>
+          ) : (
+            <p className="mt-8 text-start">No Movie Recommendations Yet</p>
+          )}
+        </div>
+
         {/* Area Series Recommendation*/}
         <div className="flex flex-col mt-4 text-white">
           <h1 className="text-white mt-[4rem] text-xl border-l-4 border-customOrangeColor pl-2">
-            Recommended Movies:
+            Recommended Series:
           </h1>
           {seriesRecommendation && seriesRecommendation.length > 0 ? (
             <div className="grid grid-cols-3 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 mt-4">
@@ -361,7 +383,7 @@ const SeriesDetail = () => {
               ))}
             </div>
           ) : (
-            <p className="mt-8 text-start">No Movie Recommendations Yet</p>
+            <p className="mt-8 text-start">No Series Recommendations Yet</p>
           )}
         </div>
 
@@ -383,7 +405,7 @@ const SeriesDetail = () => {
           </button>
         </div>
 
-        {/* Area Movie Comments */}
+        {/* Area Series Comments */}
         <div className="w-full lg:flex mt-[4rem] justify-between gap-[4rem]">
           <div className="flex flex-col w-[30rem]">
             <Link to={`/review-list/${seriesDetail.id}`}>
@@ -397,7 +419,7 @@ const SeriesDetail = () => {
             <Comments movieId={seriesId} limit={5}/>
           </div>
 
-          {/* Area Upcoming Movies*/}
+          {/* Area Upcoming Series*/}
           <div className="flex flex-col">
             <h1 className="text-white mt-[4rem] lg:mt-[0rem] mb-[2rem] text-xl border-l-4 border-customOrangeColor pl-2">
               Upcoming Movies & Shows
