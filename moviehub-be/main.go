@@ -33,7 +33,7 @@ func main() {
 
     corsConfig := cors.Config{
         AllowOrigins:     []string{"http://localhost:5173"},
-        AllowMethods:     []string{"POST", "GET", "OPTIONS", "PUT"},
+        AllowMethods:     []string{"POST", "GET", "OPTIONS", "PUT", "DELETE"},
         AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
         AllowCredentials: true,
     }
@@ -64,6 +64,7 @@ func main() {
 	{
 		favoriteGroup.POST("/add/:movieId", middleware.AuthMiddleWare(), favoriteCtrl.AddToFavorite)
 		favoriteGroup.DELETE("/remove/:movieId", middleware.AuthMiddleWare(), favoriteCtrl.RemoveFromFavorite)
+        favoriteGroup.POST("/check/:movieId", middleware.AuthMiddleWare(), favoriteCtrl.CheckFavoriteState)
 	} 
 
     userGroup := r.Group("/users")

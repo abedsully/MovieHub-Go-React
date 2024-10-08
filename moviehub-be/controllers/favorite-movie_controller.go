@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
@@ -23,26 +24,96 @@ func isValidFavoriteType(types enums.FavoriteType) bool {
 	return false
 }
 
-func (ctrl *FavoriteMovieController) AddToFavorite(c *gin.Context) {
-	var favorite models.Favorite
+func (ctrl *FavoriteMovieController) CheckFavoriteState(c *gin.Context) {
 	var existingFavorite models.Favorite
 
-	if err := c.ShouldBindJSON(&favorite); err != nil {
+	var input struct {
+		Type    *enums.FavoriteType `json:"type"`
+		MovieID *int                `json:"movie_id"`
+	}
+
+	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	if favorite.MovieID == nil {
+	if input.MovieID == nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "movieId is required"})
 		return
 	}
 
-	if favorite.Type == nil {
+	if input.Type == nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "type is required"})
 		return
 	}
 
-	if !isValidFavoriteType(*favorite.Type) {
+	if !isValidFavoriteType(*input.Type) {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "favorite type field is wrong"})
+		return
+	}
+
+	currentUserIDStr, exists := c.Get("user_id")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User ID not found"})
+		return
+	}
+
+	currentUserID, err := uuid.Parse(currentUserIDStr.(string))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid user ID"})
+		return
+	}
+
+	err = ctrl.DB.Where("user_id = ? AND movie_id = ?", currentUserID, *input.MovieID).First(&existingFavorite).Error
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.JSON(http.StatusOK, gin.H{"isFavorite": false})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to check favorite state"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"isFavorite": true})
+}
+
+func (ctrl *FavoriteMovieController) AddToFavorite(c *gin.Context) {
+	var favorite models.Favorite
+
+	var input struct {
+		Type    *enums.FavoriteType `json:"type"`
+		MovieID *int                `json:"movie_id"`
+		UserID uuid.UUID			`json:"user_id"`
+	}
+	var existingFavorite models.Favorite
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	fmt.Println("movieId", *input.MovieID);
+	fmt.Println("type", *input.Type);
+	fmt.Println("user_id", input.UserID);
+
+	if input.MovieID == nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "movieId is required"})
+		return
+	}
+
+
+	if input.Type == nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "type is required"})
+		return
+	}
+
+	if input.UserID == uuid.Nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "user_id is required"})
+		return
+	}
+
+
+	if !isValidFavoriteType(*input.Type) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "favorite type field is wrong"})
 		return
 	}
@@ -55,7 +126,7 @@ func (ctrl *FavoriteMovieController) AddToFavorite(c *gin.Context) {
 		return
 	}
 
-	if err := ctrl.DB.Where("user_id = ? AND movie_id = ?", currentUserID, *favorite.MovieID).First(&existingFavorite).Error; err == nil {
+	if err := ctrl.DB.Where("user_id = ? AND movie_id = ?", currentUserID, *input.MovieID).First(&existingFavorite).Error; err == nil {
 		c.JSON(http.StatusConflict, gin.H{"error": "This movie is already in your favorites"})
 		return
 	} else if err != gorm.ErrRecordNotFound {
@@ -63,13 +134,16 @@ func (ctrl *FavoriteMovieController) AddToFavorite(c *gin.Context) {
 		return
 	}
 
-	if favorite.UserID != currentUserID {
+	if input.UserID != currentUserID {
 		c.JSON(http.StatusForbidden, gin.H{"error": "User ID does not match the current user"})
 		return
 	}
 
 	favorite.ID = uuid.New()
 	favorite.DateInputted = time.Now()
+	favorite.MovieID = input.MovieID;
+	favorite.Type = input.Type;
+	favorite.UserID = input.UserID;
 
 	if err := ctrl.DB.Create(&favorite).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to add to your favorite lists"})
@@ -81,42 +155,36 @@ func (ctrl *FavoriteMovieController) AddToFavorite(c *gin.Context) {
 
 func (ctrl *FavoriteMovieController) RemoveFromFavorite(c *gin.Context) {
 	var favorite models.Favorite
-	var existingFavorite models.Favorite
 
-	if err := c.ShouldBindJSON(&favorite); err != nil {
+	var input struct {
+		Type    *enums.FavoriteType `json:"type"`
+		MovieID *int                `json:"movie_id"`
+		UserID uuid.UUID			`json:"user_id"`
+	}
+
+	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	currentUserIDStr := c.MustGet("user_id").(string)
-	curentUserID, err := uuid.Parse(currentUserIDStr)
-
-	if favorite.MovieID == nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "movieId is required"})
-		return
-	}
-
-	if favorite.Type == nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "type is required"})
-		return
-	}
-
-	if !isValidFavoriteType(*favorite.Type) {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "favorite type field is wrong"})
-		return
-	}
-
+	currentUserID, err := uuid.Parse(currentUserIDStr)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid user ID"})
 		return
 	}
 
-	if favorite.UserID != curentUserID {
-		c.JSON(http.StatusForbidden, gin.H{"error": "User ID does not match the current user"})
+	if input.MovieID == nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "movieId is required"})
 		return
 	}
 
-	if err := ctrl.DB.Where("user_id = ? AND movie_id = ?", curentUserID, *favorite.MovieID).First(&existingFavorite).Error; err != nil {
+	if input.Type == nil || !isValidFavoriteType(*input.Type) {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid favorite type"})
+		return
+	}
+
+	if err := ctrl.DB.Where("user_id = ? AND movie_id = ?", currentUserID, *input.MovieID).First(&favorite).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			c.JSON(http.StatusNotFound, gin.H{"error": "Favorite not found"})
 			return
@@ -125,7 +193,7 @@ func (ctrl *FavoriteMovieController) RemoveFromFavorite(c *gin.Context) {
 		return
 	}
 
-	if err := ctrl.DB.Delete(&favorite, favorite.ID).Error; err != nil {
+	if err := ctrl.DB.Delete(&favorite).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to remove from your favorite lists"})
 		return
 	}
