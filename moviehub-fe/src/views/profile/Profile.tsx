@@ -14,8 +14,6 @@ const Profile = () => {
   const userIdString = String(id);
 
   const handleSubmit = async () => {
-    console.log("Submitting:", username, profilePicture); // Log values
-
     const formData = new FormData();
     if (username) {
       formData.append("username", username);
@@ -71,7 +69,7 @@ const Profile = () => {
         <div className="text-white mt-[4rem]">
           {user?.profile_picture ? (
             <Avatar
-              image={`http://localhost:8080/uploads/${user.profile_picture}`}
+              image={`${ApiMovieHub.profileImage}/${user.profile_picture}`}
               size={40}
             />
           ) : (

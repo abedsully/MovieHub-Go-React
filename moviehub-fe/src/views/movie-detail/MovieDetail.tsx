@@ -23,7 +23,7 @@ import { Helmet } from "react-helmet";
 import Navbar from "../../component/navbar/Navbar";
 import ImagePreviewModal from "../../component/image-preview/ImagePreviewModal";
 import logo from "../../assets/logo.png";
-import { ChevronRightIcon } from "@heroicons/react/24/outline";
+import { ChevronRightIcon, HeartIcon } from "@heroicons/react/24/outline";
 import Enums from "../../constant/Enums";
 
 const MovieDetail = () => {
@@ -50,6 +50,7 @@ const MovieDetail = () => {
 
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isFavorite, setIsFavorite] = useState<boolean>();
 
   const handleMoreImageClick = () => {
     setCurrentImageIndex(0);
@@ -90,13 +91,20 @@ const MovieDetail = () => {
           `${API_Tmdb.recommendation("movie", movieId)}`
         );
         setMovieRecommendations(movieRecommendation.data.results.slice(0, 6));
+
+        const favoriteStateResponse = await axios.post(
+          ApiMovieHub.checkFavorite(movieId),
+          { type: Enums.MediaTypes.MOVIE, movie_id: movieId },
+          { withCredentials: true }
+        );
+        setIsFavorite(favoriteStateResponse.data.isFavorite);
+        console.log(favoriteStateResponse.data.isFavorite);
       } catch (error) {
         console.error("Error fetching movie details or videos", error);
       } finally {
         setLoading(false);
       }
     };
-
     fetchMovieDetail();
   }, [id]);
 
@@ -223,6 +231,35 @@ const MovieDetail = () => {
     }
   };
 
+  const toggleFavorite = async () => {
+    try {
+      if (isFavorite === true) {
+        await axios.delete(ApiMovieHub.removeFavorite(movieId), {
+          data: {
+            movie_id: movieId,
+            type: Enums.MediaTypes.MOVIE,
+            user_id: user?.id,
+          },
+          withCredentials: true,
+        });
+        setIsFavorite(false);
+      } else {
+        await axios.post(
+          ApiMovieHub.addFavorite(movieId),
+          {
+            type: Enums.MediaTypes.MOVIE,
+            movie_id: movieId,
+            user_id: user?.id,
+          },
+          { withCredentials: true }
+        );
+        setIsFavorite(true);
+      }
+    } catch (error) {
+      console.error("Error toggling favorite:", error);
+    }
+  };
+
   return (
     <>
       <Helmet>
@@ -244,6 +281,19 @@ const MovieDetail = () => {
             <div className="flex flex-col">
               <div className="min-w-screen lg:flex justify-between gap-[4rem] ">
                 <div className="flex flex-col gap-4 text-center lg:text-start">
+
+                  <button
+                    onClick={toggleFavorite}
+                    className={`flex justify-center lg:justify-start items-center gap-2 mt-4 ${
+                      isFavorite === true ? "text-red-500" : "text-white"
+                    }`}
+                  >
+                    <HeartIcon className="h-6 w-6" />
+                    {isFavorite === true
+                      ? "Remove from Favoritess"
+                      : "Add to Favorites"}
+                  </button>
+
                   <h1 className="text-4xl font-medium">{movieDetail.title}</h1>
                   <div className="flex gap-2 text-sm text-gray-400 font-medium justify-center lg:justify-start">
                     <p>{releaseYear}</p>

@@ -18,7 +18,6 @@ const iconClasses2 = `h-5 w-5`;
 
 const ProfilePop = ({ image }: IProfileProp) => {
     const user = useUser();
-    const userId = user?.id ?? "";
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
 
@@ -46,7 +45,7 @@ const ProfilePop = ({ image }: IProfileProp) => {
                 className="btn btn-circle cursor-pointer btn-ghost"
                 onClick={toggleDropdown}
             >
-                <Avatar image={image} />
+                <Avatar image={`${ApiMovieHub.profileImage}${user?.profile_picture}`} />
             </div>
             {isOpen && (
                 <ul className="absolute right-0 z-50 menu p-2 shadow-lg bg-white rounded-box w-52">
@@ -56,7 +55,7 @@ const ProfilePop = ({ image }: IProfileProp) => {
                         </Link>
                     </li>
                     <li>
-                        <Link to={`/profile/${userId}`} className="hover:bg-gray-200">
+                        <Link to={`/profile/${user?.id}`} className="hover:bg-gray-200">
                             <UserIcon className={iconClasses2} /> My Profile
                         </Link>
                     </li>

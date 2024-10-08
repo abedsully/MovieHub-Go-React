@@ -24,6 +24,9 @@ export const ApiMovieHub = {
     removeFavorite: (movieId: number) => {
         return `${api}/favorite/remove/${movieId}`
     }, 
+    checkFavorite: (movieId: number) => {
+        return `${api}/favorite/check/${movieId}`
+    },
 
     // Area API User
     getUserByUserId: (userId: string) => {
@@ -32,7 +35,9 @@ export const ApiMovieHub = {
 
     editProfile: (userId: string) => {
         return `${api}/users/edit/${userId}`
-    }
+    },
+
+    profileImage: `${api}/uploads/`
 }
 
 export const tmdbAPI = "https://api.themoviedb.org/3";

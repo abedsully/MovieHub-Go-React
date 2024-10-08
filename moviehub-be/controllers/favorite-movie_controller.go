@@ -86,10 +86,6 @@ func (ctrl *FavoriteMovieController) AddToFavorite(c *gin.Context) {
 		return
 	}
 
-	fmt.Println("movieId", *input.MovieID);
-	fmt.Println("type", *input.Type);
-	fmt.Println("user_id", input.UserID);
-
 	if input.MovieID == nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "movieId is required"})
 		return
