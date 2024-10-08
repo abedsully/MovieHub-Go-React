@@ -29,14 +29,16 @@ func main() {
     models.Migrate(db)
 
     r := gin.Default()
+    
 
     corsConfig := cors.Config{
         AllowOrigins:     []string{"http://localhost:5173"},
-        AllowMethods:     []string{"POST", "GET", "OPTIONS"},
+        AllowMethods:     []string{"POST", "GET", "OPTIONS", "PUT"},
         AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
         AllowCredentials: true,
     }
     r.Use(cors.New(corsConfig))
+    r.Static("/uploads", "./uploads");
 
     authCtrl := &controllers.AuthController{DB: db}
     userCtrl := &controllers.UserController{DB: db}
@@ -67,6 +69,7 @@ func main() {
     userGroup := r.Group("/users")
     {
         userGroup.GET("/:id", middleware.AuthMiddleWare(), userCtrl.GetUserByUserId)
+        userGroup.PUT("/edit/:id", middleware.AuthMiddleWare(), userCtrl.EditUserProfile)
     }
 
     r.Run(":8080")

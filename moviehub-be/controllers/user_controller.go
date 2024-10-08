@@ -1,6 +1,7 @@
 package controllers
 
 import (
+
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -35,5 +36,49 @@ func (ctrl *UserController) GetUserByUserId(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"id": user.ID, "username": user.Username})
+	c.JSON(http.StatusOK, gin.H{"id": user.ID, "username": user.Username, "profile_picture": user.ProfilePicture})
+}
+
+func (ctrl *UserController) EditUserProfile(c *gin.Context) {
+	userId := c.Param("id")
+
+	var user models.User
+
+	if err := ctrl.DB.Where("id = ?", userId).First(&user).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		return
+	}
+
+	var input struct {
+		Username *string `form:"username"`
+	}
+
+	if err := c.ShouldBind(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if input.Username == nil && c.Request.MultipartForm == nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "At least one field (username or profile picture) must be provided"})
+		return
+	}
+
+	if input.Username != nil {
+		user.Username = *input.Username
+	}
+
+	if file, err := c.FormFile("profile_picture"); err == nil {
+		if err := c.SaveUploadedFile(file, "./uploads/"+file.Filename); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save profile picture"})
+			return
+		}
+		user.ProfilePicture = file.Filename
+	}
+
+	if err := ctrl.DB.Save(&user).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Profile updated successfully", "username": user.Username, "profile_picture": user.ProfilePicture})
 }

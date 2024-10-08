@@ -29,6 +29,10 @@ export const ApiMovieHub = {
     getUserByUserId: (userId: string) => {
         return `${api}/users/${userId}`
     },
+
+    editProfile: (userId: string) => {
+        return `${api}/users/edit/${userId}`
+    }
 }
 
 export const tmdbAPI = "https://api.themoviedb.org/3";
