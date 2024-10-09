@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 	"time"
 
@@ -185,4 +184,35 @@ func (ctrl *FavoriteMovieController) RemoveFromFavorite(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, nil)
+}
+
+func (ctrl *FavoriteMovieController) GetFavoriteByUserId(c *gin.Context) {
+	var input models.Favorite
+
+	var favorite []models.Favorite
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	currentUserIdStr := c.MustGet("user_id").(string)
+	currentUserId, err := uuid.Parse(currentUserIdStr)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid user ID"})
+		return
+	}
+
+	if input.UserID != currentUserId {
+		c.JSON(http.StatusUnauthorized, gin.H{"Error": "Unauthorized Id"})
+		return
+	}
+
+	if err := ctrl.DB.Where("user_id = ?", currentUserId).Find(&favorite).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to fetch favorites"})
+		return
+	}
+
+	c.JSON(http.StatusOK, favorite)
 }

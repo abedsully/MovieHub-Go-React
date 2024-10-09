@@ -65,6 +65,7 @@ func main() {
 		favoriteGroup.POST("/add/:movieId", middleware.AuthMiddleWare(), favoriteCtrl.AddToFavorite)
 		favoriteGroup.DELETE("/remove/:movieId", middleware.AuthMiddleWare(), favoriteCtrl.RemoveFromFavorite)
         favoriteGroup.POST("/check/:movieId", middleware.AuthMiddleWare(), favoriteCtrl.CheckFavoriteState)
+        favoriteGroup.POST("/getByUserId", middleware.AuthMiddleWare(), favoriteCtrl.GetFavoriteByUserId)
 	} 
 
     userGroup := r.Group("/users")
