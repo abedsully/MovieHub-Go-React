@@ -9,6 +9,7 @@ import IMovie from "../../interfaces/IMovie";
 import IPeople from "../../interfaces/IPeople";
 import ISeries from "../../interfaces/ISeries";
 import PeopleComponent from "../../component/people-component/PeopleComponent";
+import { Helmet } from "react-helmet";
 
 const Dashboard = () => {
   const [movies, setMovies] = useState<IMovie[]>([]);
@@ -56,6 +57,9 @@ const Dashboard = () => {
 
   return (
     <>
+    <Helmet>
+      <title>MovieHub</title>
+    </Helmet>
       <div className="mt-16 2xl:ml-[24rem]">
         <Navbar image={logo} />
       </div>

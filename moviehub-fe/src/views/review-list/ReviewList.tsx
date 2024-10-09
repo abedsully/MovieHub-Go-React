@@ -34,7 +34,7 @@ const ReviewList = () => {
   return (
     <>
       <Helmet>
-        <title>MovieHub</title>
+        <title>{movieDetail?.title ?? "MovieHub"}'s Reviews</title>
       </Helmet>
 
       <div className="mt-16 2xl:ml-[24rem]">

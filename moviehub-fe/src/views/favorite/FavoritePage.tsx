@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { API_Tmdb, ApiMovieHub, tmdbAPIImage } from "../../constant/Api";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import IFavorite from "../../interfaces/IFavorite";
 import MediaTypes from "../../constant/MediaTypesEnum";
 import IMovie from "../../interfaces/IMovie";
@@ -69,6 +69,7 @@ const FavoritePage = () => {
           {favorite.map((fav) => {
             const movie = mediaDetails[fav.movie_id];
             return movie ? (
+              <Link to={`/${fav.type}/${movie.id}`}>
               <div key={fav.movie_id} className="text-center">
                 <img
                   src={`${tmdbAPIImage}${movie.poster_path}`}
@@ -77,6 +78,7 @@ const FavoritePage = () => {
                 />
                 <h4 className="text-center mt-4">{movie.title ?? movie.name}</h4>
               </div>
+              </Link>
             ) : null;
           })}
         </div>
