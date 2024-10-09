@@ -21,11 +21,10 @@ import { Helmet } from "react-helmet";
 import Navbar from "../../component/navbar/Navbar";
 import ImagePreviewModal from "../../component/image-preview/ImagePreviewModal";
 import logo from "../../assets/logo.png";
-import { ChevronRightIcon } from "@heroicons/react/24/outline";
+import { ChevronRightIcon, HeartIcon } from "@heroicons/react/24/outline";
 import ISeries from "../../interfaces/ISeries";
-import MediaTypes from "../../constant/Enums";
 import SeasonComponent from "../../component/season-component/SeasonComponent";
-import Enums from "../../constant/Enums";
+import MediaTypes from "../../constant/MediaTypesEnum";
 
 const SeriesDetail = () => {
   const { id } = useParams();
@@ -53,6 +52,7 @@ const SeriesDetail = () => {
 
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isFavorite, setIsFavorite] = useState<boolean>();
 
   const handleMoreImageClick = () => {
     setCurrentImageIndex(0);
@@ -67,12 +67,12 @@ const SeriesDetail = () => {
     const fetchSeriesDetail = async () => {
       try {
         const seriesResponse = await axios.get(
-          `${API_Tmdb.detail(Enums.MediaTypes.TV, seriesId)}`
+          `${API_Tmdb.detail(MediaTypes.TV, seriesId)}`
         );
         setSeriesDetail(seriesResponse.data);
 
         const videoResponse = await axios.get(
-          `${API_Tmdb.videos(Enums.MediaTypes.TV, seriesId)}`
+          `${API_Tmdb.videos(MediaTypes.TV, seriesId)}`
         );
         const availableVideo = videoResponse.data.results.find(
           (video: IVideo) => video.site === "YouTube" && video.official === true
@@ -80,19 +80,27 @@ const SeriesDetail = () => {
         setVideo(availableVideo || null);
 
         const seriesCredits = await axios.get(
-          `${API_Tmdb.credits(Enums.MediaTypes.TV, seriesId)}`
+          `${API_Tmdb.credits(MediaTypes.TV, seriesId)}`
         );
         setSeriesCredit(seriesCredits.data);
 
         const seriesImages = await axios.get(
-          `${API_Tmdb.images(Enums.MediaTypes.TV, seriesId)}`
+          `${API_Tmdb.images(MediaTypes.TV, seriesId)}`
         );
         setSeriesImages(seriesImages.data);
 
         const seriesRecommendation = await axios.get(
-          `${API_Tmdb.recommendation(Enums.MediaTypes.TV, seriesId)}`
+          `${API_Tmdb.recommendation(MediaTypes.TV, seriesId)}`
         );
         setSeriesRecommendation(seriesRecommendation.data.results.slice(0, 6));
+
+        const favoriteStateResponse = await axios.post(
+          ApiMovieHub.checkFavorite(seriesId),
+          { type: MediaTypes.TV, movie_id: seriesId },
+          { withCredentials: true }
+        );
+        setIsFavorite(favoriteStateResponse.data.isFavorite);
+
       } catch (error) {
         console.error("Error fetching series details or videos", error);
       } finally {
@@ -122,7 +130,7 @@ const SeriesDetail = () => {
           userId: user.id,
           comment: comment,
           dateInputted: new Date().toISOString(),
-          type: Enums.MediaTypes.TV,
+          type: MediaTypes.TV,
         },
         { withCredentials: true }
       );
@@ -225,6 +233,35 @@ const SeriesDetail = () => {
     }
   };
 
+  const toggleFavorite = async () => {
+    try {
+      if (isFavorite === true) {
+        await axios.delete(ApiMovieHub.removeFavorite(seriesId), {
+          data: {
+            movie_id: seriesId,
+            type: MediaTypes.TV,
+            user_id: user?.id,
+          },
+          withCredentials: true,
+        });
+        setIsFavorite(false);
+      } else {
+        await axios.post(
+          ApiMovieHub.addFavorite(seriesId),
+          {
+            type: MediaTypes.TV,
+            movie_id: seriesId,
+            user_id: user?.id,
+          },
+          { withCredentials: true }
+        );
+        setIsFavorite(true);
+      }
+    } catch (error) {
+      console.error("Error toggling favorite:", error);
+    }
+  };
+
   return (
     <>
       <Helmet>
@@ -240,12 +277,25 @@ const SeriesDetail = () => {
           <div className="flex flex-col lg:flex-row gap-[1rem] lg:gap-[6rem] items-center">
             <img
               src={`https://image.tmdb.org/t/p/w400${seriesDetail.poster_path}`}
-              alt={seriesDetail.name}
               className="rounded-lg"
             />
             <div className="flex flex-col">
               <div className="min-w-screen lg:flex justify-between gap-[4rem] ">
                 <div className="flex flex-col gap-4 text-center lg:text-start">
+
+                <button
+                    onClick={toggleFavorite}
+                    className={`flex justify-center lg:justify-start items-center gap-2 mt-4 ${
+                      isFavorite === true ? "text-red-500" : "text-white"
+                    }`}
+                  >
+                    <HeartIcon className="h-6 w-6" />
+                    {isFavorite === true
+                      ? "Remove from Favoritess"
+                      : "Add to Favorites"}
+                  </button>
+
+
                   <h1 className="text-4xl font-medium">{seriesDetail.name}</h1>
                   <div className="flex gap-2 text-sm text-gray-400 font-medium justify-center lg:justify-start">
                     <p>{releaseYear}</p>

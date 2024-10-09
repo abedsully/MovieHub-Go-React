@@ -10,6 +10,7 @@ import routerCastDetail from "../views/cast-detail/CastDetail.router";
 import routerReviewList from "../views/review-list/ReviewList.router";
 import routerReviewUser from "../views/reviews/Reviews.router";
 import routerProfile from "../views/profile/Profile.router"
+import routerFavorite from "../views/favorite/FavoritePage.router"
 
 export const routes: IDefaultRouter[] = [
     ...routerRegister,
@@ -21,7 +22,8 @@ export const routes: IDefaultRouter[] = [
     ...routerCastDetail,
     ...routerReviewList,
     ...routerReviewUser,
-    ...routerProfile
+    ...routerProfile,
+    ...routerFavorite
 ];
 
 export default routes;

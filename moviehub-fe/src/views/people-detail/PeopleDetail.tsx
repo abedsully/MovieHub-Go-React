@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
 import IPeople from "../../interfaces/IPeople";
 import { API_Tmdb, tmdbAPIImage } from "../../constant/Api";
-import Enum from "../../constant/Enums";
 import { convertIdToInt } from "../../utils/utils";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import IMovie from "../../interfaces/IMovie";
 import CardComponent from "../../component/card-component/CardComponent";
-import Enums from "../../constant/Enums";
 import IPeoplePhotos from "../../interfaces/IPeoplePhotos";
 import Navbar from "../../component/navbar/Navbar";
 import logo from "../../assets/logo.png"
+import MediaTypes from "../../constant/MediaTypesEnum";
 
 const PeopleDetail = () => {
   const { id } = useParams();
@@ -25,7 +24,7 @@ const PeopleDetail = () => {
     const fetchPeopleDetail = async () => {
       try {
         const detailResponse = await axios.get(
-          `${API_Tmdb.detail(Enum.MediaTypes.PEOPLE, personId)}`
+          `${API_Tmdb.detail(MediaTypes.PEOPLE, personId)}`
         );
         setPeopleDetail(detailResponse.data);
 
@@ -35,7 +34,7 @@ const PeopleDetail = () => {
         setCredits(creditResponse.data.cast.slice(0, 6));
 
         const imageResponse = await axios.get(
-          `${API_Tmdb.images(Enums.MediaTypes.PEOPLE, personId)}`
+          `${API_Tmdb.images(MediaTypes.PEOPLE, personId)}`
         );
         setImages(imageResponse.data);
       } catch (error) {

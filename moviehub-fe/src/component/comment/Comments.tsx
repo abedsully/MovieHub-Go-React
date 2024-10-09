@@ -8,7 +8,7 @@ import Avatar from "../avatar/Avatar";
 import logo from "../../assets/logo.png";
 import IMovie from "../../interfaces/IMovie";
 import { Link } from "react-router-dom";
-import {Enums} from "../../constant/Enums";
+import MediaTypes from "../../constant/MediaTypesEnum";
 
 export const tmdbAPIImage = "https://image.tmdb.org/t/p/w500/";
 
@@ -38,7 +38,7 @@ const Comments = ({ userId, movieId, limit }: CommentsProps) => {
             { withCredentials: true }
           );
 
-          const mediaMap = new Map<number, Enums.MediaTypes>();
+          const mediaMap = new Map<number, MediaTypes>();
 
           response.data.forEach((comment: IComment) => {
             mediaMap.set(comment.movieId, comment.type);
@@ -48,7 +48,7 @@ const Comments = ({ userId, movieId, limit }: CommentsProps) => {
             async (id) => {
               const mediaType = mediaMap.get(id);
               const mediaResponse = await axios.get(
-                `${API_Tmdb.detail(mediaType, id)}`
+                `${API_Tmdb.detail(mediaType!, id)}`
               );
               return { id, data: mediaResponse.data };
             }

@@ -1,4 +1,4 @@
-import Enums from "./Enums";
+import MediaTypes from "./MediaTypesEnum";
 
 export const api = "http://localhost:8080";
 
@@ -27,6 +27,8 @@ export const ApiMovieHub = {
     checkFavorite: (movieId: number) => {
         return `${api}/favorite/check/${movieId}`
     },
+    getFavoriteByUserId: `${api}/favorite/getByUserId`,
+
 
     // Area API User
     getUserByUserId: (userId: string) => {
@@ -36,8 +38,9 @@ export const ApiMovieHub = {
     editProfile: (userId: string) => {
         return `${api}/users/edit/${userId}`
     },
+    profileImage: `${api}/uploads/`,
 
-    profileImage: `${api}/uploads/`
+
 }
 
 export const tmdbAPI = "https://api.themoviedb.org/3";
@@ -48,48 +51,48 @@ export const tmbdAPIKey = import.meta.env.VITE_API_KEY
 export const API_Tmdb = {
 
     // Area API Trending Movies/Series/People
-    trending: (category: string) => {
+    trending: (category: MediaTypes) => {
         return `${tmdbAPI}/trending/${category}/day?api_key=${tmbdAPIKey}`
     },
 
     // Area API Search Movies/Series/People
-    searchMulti: (category: string) => {
+    searchMulti: (category: MediaTypes) => {
         return `${tmdbAPI}/search/${category}?api_key=${tmbdAPIKey}`
     },
 
     // Area API Detail Movies/Series/People
-    detail: (category: string, id: number) => {
+    detail: (category: MediaTypes, id: number) => {
         return `${tmdbAPI}/${category}/${id}?api_key=${tmbdAPIKey}`
     },
 
     // Area API Get Featured Videos Movies/Series
-    videos: (category: string, id: number) => {
+    videos: (category: MediaTypes, id: number) => {
         return `${tmdbAPI}/${category}/${id}/videos?api_key=${tmbdAPIKey}`
     },
 
     // Area API Movie Credits Actor/Director
-    credits: (category: string, id: number) => {
+    credits: (category: MediaTypes, id: number) => {
         return `${tmdbAPI}/${category}/${id}/credits?api_key=${tmbdAPIKey}`
     },
 
     // Area API Get Images
-    images: (category: string, id: number) => {
+    images: (category: MediaTypes, id: number) => {
         return `${tmdbAPI}/${category}/${id}/images?api_key=${tmbdAPIKey}`
     },
 
     // Area API Get Recommendations from Id - Movie, Sereis
-    recommendation: (category: string, id: number) => {
+    recommendation: (category: MediaTypes, id: number) => {
         return `${tmdbAPI}/${category}/${id}/recommendations?api_key=${tmbdAPIKey}`
     },
 
     upcomingMovies: `${tmdbAPI}/movie/upcoming?api_key=${tmbdAPIKey}`,
 
     combinedCredits: (person_id: string) => {
-        return `${tmdbAPI}/${Enums.MediaTypes.PEOPLE}/${person_id}/combined_credits?api_key=${tmbdAPIKey}`
+        return `${tmdbAPI}/${MediaTypes.PEOPLE}/${person_id}/combined_credits?api_key=${tmbdAPIKey}`
     },
 
     // Area API Get People's Tagged Images
     taggedImages: (person_id: number) => {
-        return `${tmdbAPI}/${Enums.MediaTypes.PEOPLE}/${person_id}/tagged_images?api_key=${tmbdAPIKey}`
+        return `${tmdbAPI}/${MediaTypes.PEOPLE}/${person_id}/tagged_images?api_key=${tmbdAPIKey}`
     }
 }

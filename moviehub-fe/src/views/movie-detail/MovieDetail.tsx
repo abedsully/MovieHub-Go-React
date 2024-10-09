@@ -24,7 +24,7 @@ import Navbar from "../../component/navbar/Navbar";
 import ImagePreviewModal from "../../component/image-preview/ImagePreviewModal";
 import logo from "../../assets/logo.png";
 import { ChevronRightIcon, HeartIcon } from "@heroicons/react/24/outline";
-import Enums from "../../constant/Enums";
+import MediaTypes from "../../constant/MediaTypesEnum";
 
 const MovieDetail = () => {
   const { id } = useParams();
@@ -65,12 +65,12 @@ const MovieDetail = () => {
     const fetchMovieDetail = async () => {
       try {
         const movieResponse = await axios.get(
-          `${API_Tmdb.detail("movie", movieId)}`
+          `${API_Tmdb.detail(MediaTypes.MOVIE, movieId)}`
         );
         setMovieDetail(movieResponse.data);
 
         const videoResponse = await axios.get(
-          `${API_Tmdb.videos("movie", movieId)}`
+          `${API_Tmdb.videos(MediaTypes.MOVIE, movieId)}`
         );
         const availableVideo = videoResponse.data.results.find(
           (video: IVideo) => video.site === "YouTube" && video.official === true
@@ -78,27 +78,26 @@ const MovieDetail = () => {
         setVideo(availableVideo || null);
 
         const movieCredits = await axios.get(
-          `${API_Tmdb.credits("movie", movieId)}`
+          `${API_Tmdb.credits(MediaTypes.MOVIE, movieId)}`
         );
         setMovieCredit(movieCredits.data);
 
         const movieImages = await axios.get(
-          `${API_Tmdb.images("movie", movieId)}`
+          `${API_Tmdb.images(MediaTypes.MOVIE, movieId)}`
         );
         setMovieImages(movieImages.data);
 
         const movieRecommendation = await axios.get(
-          `${API_Tmdb.recommendation("movie", movieId)}`
+          `${API_Tmdb.recommendation(MediaTypes.MOVIE, movieId)}`
         );
         setMovieRecommendations(movieRecommendation.data.results.slice(0, 6));
 
         const favoriteStateResponse = await axios.post(
           ApiMovieHub.checkFavorite(movieId),
-          { type: Enums.MediaTypes.MOVIE, movie_id: movieId },
+          { type: MediaTypes.MOVIE, movie_id: movieId },
           { withCredentials: true }
         );
         setIsFavorite(favoriteStateResponse.data.isFavorite);
-        console.log(favoriteStateResponse.data.isFavorite);
       } catch (error) {
         console.error("Error fetching movie details or videos", error);
       } finally {
@@ -127,7 +126,7 @@ const MovieDetail = () => {
           userId: user.id,
           comment: comment,
           dateInputted: new Date().toISOString(),
-          type: Enums.MediaTypes.MOVIE,
+          type: MediaTypes.MOVIE,
         },
         { withCredentials: true }
       );
@@ -237,7 +236,7 @@ const MovieDetail = () => {
         await axios.delete(ApiMovieHub.removeFavorite(movieId), {
           data: {
             movie_id: movieId,
-            type: Enums.MediaTypes.MOVIE,
+            type: MediaTypes.MOVIE,
             user_id: user?.id,
           },
           withCredentials: true,
@@ -247,7 +246,7 @@ const MovieDetail = () => {
         await axios.post(
           ApiMovieHub.addFavorite(movieId),
           {
-            type: Enums.MediaTypes.MOVIE,
+            type: MediaTypes.MOVIE,
             movie_id: movieId,
             user_id: user?.id,
           },

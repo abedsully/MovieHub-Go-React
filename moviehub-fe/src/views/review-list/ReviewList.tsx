@@ -8,7 +8,7 @@ import { convertIdToInt } from "../../utils/utils";
 import axios from "axios";
 import IMovie from "../../interfaces/IMovie";
 import Comments from "../../component/comment/Comments";
-import Enums from "../../constant/Enums";
+import MediaTypes from "../../constant/MediaTypesEnum";
 
 const ReviewList = () => {
   const { id } = useParams();
@@ -19,7 +19,7 @@ const ReviewList = () => {
     const fetchReviewList = async () => {
       try {
         const movieResponse = await axios.get(
-          `${API_Tmdb.detail(Enums.MediaTypes.MOVIE, movieId)}`
+          `${API_Tmdb.detail(MediaTypes.MOVIE, movieId)}`
         );
         setMovieDetail(movieResponse.data);
 

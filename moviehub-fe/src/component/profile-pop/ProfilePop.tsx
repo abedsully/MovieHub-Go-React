@@ -45,7 +45,10 @@ const ProfilePop = ({ image }: IProfileProp) => {
                 className="btn btn-circle cursor-pointer btn-ghost"
                 onClick={toggleDropdown}
             >
-                <Avatar image={`${ApiMovieHub.profileImage}${user?.profile_picture}`} />
+                {
+                    user?.profile_picture ? <Avatar image={`${ApiMovieHub.profileImage}${user?.profile_picture}`} /> : <Avatar image={image} /> 
+                }
+                
             </div>
             {isOpen && (
                 <ul className="absolute right-0 z-50 menu p-2 shadow-lg bg-white rounded-box w-52">

@@ -9,7 +9,7 @@ import { convertIdToInt } from "../../utils/utils";
 import axios from "axios";
 import ICast from "../../interfaces/ICast";
 import IMovie from "../../interfaces/IMovie";
-import Enums from "../../constant/Enums";
+import MediaTypes from "../../constant/MediaTypesEnum";
 
 const CastDetail = () => {
   const { id } = useParams();
@@ -21,12 +21,12 @@ const CastDetail = () => {
     const fetchMovieCasts = async () => {
       try {
         const movieResponse = await axios.get(
-          `${API_Tmdb.detail(Enums.MediaTypes.MOVIE, movieId)}`
+          `${API_Tmdb.detail(MediaTypes.MOVIE, movieId)}`
         );
         setMovieDetail(movieResponse.data);
 
         const movieCredits = await axios.get(
-          `${API_Tmdb.credits(Enums.MediaTypes.MOVIE, movieId)}`
+          `${API_Tmdb.credits(MediaTypes.MOVIE, movieId)}`
         );
         setMovieCredit(movieCredits.data.cast);
       } catch (error) {

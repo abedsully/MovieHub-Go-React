@@ -3,7 +3,7 @@ import ICardComponent from "./ICardComponent";
 import { tmdbAPIImage } from "../../constant/Api";
 import logo from "../../assets/logo.png";
 import { isMovie } from "../../utils/utils";
-import Enums from "../../constant/Enums";
+import MediaTypes from "../../constant/MediaTypesEnum";
 
 const CardComponent = ({ movie, size, upcoming }: ICardComponent) => {
   const imageUrl = movie.poster_path
@@ -14,8 +14,8 @@ const CardComponent = ({ movie, size, upcoming }: ICardComponent) => {
     <Link
       to={
         (isMovie(movie))
-          ? `/${Enums.MediaTypes.MOVIE}/${movie.id}`
-          : `/${Enums.MediaTypes.TV}/${movie.id}`
+          ? `/${MediaTypes.MOVIE}/${movie.id}`
+          : `/${MediaTypes.TV}/${movie.id}`
       }
     >
       <div

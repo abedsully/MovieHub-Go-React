@@ -15,7 +15,7 @@ const SidebarRoutes = (userId: string) :ISidebarRoutes[] => [
 
   // Search
   {
-    path: `/my-favorite/${userId}`,
+    path: `/favorite/${userId}`,
     icon: <HeartIcon className={iconClasses} />,
     name: "My Favorites",
   },
