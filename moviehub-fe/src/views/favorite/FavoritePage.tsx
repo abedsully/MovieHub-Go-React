@@ -63,7 +63,7 @@ const FavoritePage = () => {
       <div className="mt-16 2xl:ml-[24rem]">
         <Navbar image={logo} />
       </div>
-    <h3 className="text-center text-white mt-[2rem]">Favorite Movie Lists</h3>
+      <h1 className="text-lg font-semibold text-white mt-12">Favorite Movies</h1>
       <div className="lg:ml-[17rem] text-white mt-[2rem]">
         <div className="grid grid-cols-3 gap-[4rem] w-full">
           {favorite.map((fav) => {

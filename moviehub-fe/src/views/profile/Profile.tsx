@@ -101,7 +101,7 @@ const Profile = () => {
           <div className="mt-8 flex justify-center">
             <button
               type="submit"
-              className="bg-purple-500 text-white font-semibold py-2 px-4 rounded hover:bg-purple-600 transition duration-300"
+              className="bg-customOrangeColor text-white font-semibold py-2 px-4 rounded hover:customOrangeColor transition duration-300"
             >
               Edit Profile
             </button>
