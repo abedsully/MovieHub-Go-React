@@ -22,7 +22,9 @@ const Comments = ({ userId, movieId, limit }: CommentsProps) => {
   const [comments, setComments] = useState<IComment[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [mediaDetails, setMediaDetails] = useState<{ [key: number]: IMovie }>({});
+  const [mediaDetails, setMediaDetails] = useState<{ [key: number]: IMovie }>(
+    {}
+  );
   const [userMap, setUserMap] = useState<{ [key: string]: IUser }>({});
 
   useEffect(() => {
@@ -43,7 +45,7 @@ const Comments = ({ userId, movieId, limit }: CommentsProps) => {
           response.data.forEach((comment: IComment) => {
             mediaMap.set(comment.movieId, comment.type);
           });
-          
+
           const mediaDetailsPromises = Array.from(mediaMap.keys()).map(
             async (id) => {
               const mediaType = mediaMap.get(id);
@@ -64,7 +66,7 @@ const Comments = ({ userId, movieId, limit }: CommentsProps) => {
           );
 
           setMediaDetails(mediaDetailsMap);
-          setComments(response.data); 
+          setComments(response.data);
 
           const userFetchPromises = response.data.map(
             (comment: { userId: string }) => fetchUserById(comment.userId)
@@ -83,9 +85,9 @@ const Comments = ({ userId, movieId, limit }: CommentsProps) => {
           });
 
           setComments(response.data);
-          
-          const userFetchPromises = response.data.map(
-            comment => fetchUserById(comment.userId)
+
+          const userFetchPromises = response.data.map((comment) =>
+            fetchUserById(comment.userId)
           );
 
           const users = await Promise.all(userFetchPromises);
@@ -124,7 +126,9 @@ const Comments = ({ userId, movieId, limit }: CommentsProps) => {
                   {mediaDetails[comment.movieId] && (
                     <div className="flex-none w-24 h-36 rounded-lg overflow-hidden shadow-md">
                       <img
-                        src={`${tmdbAPIImage}${mediaDetails[comment.movieId].poster_path}`}
+                        src={`${tmdbAPIImage}${
+                          mediaDetails[comment.movieId].poster_path
+                        }`}
                         alt={mediaDetails[comment.movieId].title}
                         className="w-full h-full object-cover"
                       />
@@ -133,7 +137,16 @@ const Comments = ({ userId, movieId, limit }: CommentsProps) => {
                   <div className="flex-1 flex flex-col">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <Avatar image={logo} size={12} />
+                        <Avatar
+                          image={
+                            userMap[comment.userId]?.profile_picture
+                              ? `${ApiMovieHub.profileImage}${
+                                  userMap[comment.userId].profile_picture
+                                }`
+                              : logo
+                          }
+                          size={10}
+                        />
                         <p className="text-lg font-semibold">
                           {userMap[comment.userId]?.username || "Unknown User"}
                         </p>
